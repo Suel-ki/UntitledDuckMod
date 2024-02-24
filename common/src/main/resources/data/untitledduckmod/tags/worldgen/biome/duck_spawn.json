@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:is_river",
+      "required": false
+    },
+    {
+      "id": "#c:river",
+      "required": false
+    },
+    {
+      "id": "#forge:is_swamp",
+      "required": false
+    },
+    {
+      "id": "#c:swamp",
+      "required": false
+    }
+  ]
+}

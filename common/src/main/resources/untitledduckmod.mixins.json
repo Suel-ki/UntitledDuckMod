@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.untitledduckmod.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BrewingRecipeRegistryInvoker",
+    "IllagerIntimidationMixin"
+  ],
+  "client": [
+    "DuckEggSpawnMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

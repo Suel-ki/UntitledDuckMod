@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "https://github.com/Suel_ki/UntitledDuckMod/issues"
+license = "MIT"
+
+[[mods]]
+modId = "untitledduckmod"
+version = "${version}"
+displayName = "Untitled Duck"
+authors = "Suel_ki, Okabintaro, ArtistMonster24"
+logoFile = "logo.png"
+credits = "Thanks to Okabintaro for the original work, as well as geckolib and architectury!"
+description = '''
+Ducks and Geese for Forge and Fabric! Powered by geckolib and architectury.
+'''
+
+[[dependencies.untitledduckmod]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.untitledduckmod]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.untitledduckmod]]
+modId = "geckolib"
+mandatory = true
+versionRange = "[4.4.2,)"
+ordering = "AFTER"
+side = "BOTH"
