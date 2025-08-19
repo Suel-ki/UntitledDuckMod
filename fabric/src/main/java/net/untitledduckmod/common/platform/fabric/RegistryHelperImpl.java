@@ -20,6 +20,7 @@ public class RegistryHelperImpl {
         return () -> registry;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Item> Supplier<T> registerSpawnEggItem
             (
             String name, Supplier<? extends EntityType<? extends MobEntity>> type,

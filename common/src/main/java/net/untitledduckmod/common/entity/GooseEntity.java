@@ -3,6 +3,7 @@ package net.untitledduckmod.common.entity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.*;
@@ -25,6 +26,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
@@ -84,7 +86,22 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     }
 
     public static boolean checkGooseSpawnRules(EntityType<GooseEntity> goose, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isIn(ModTags.BlockTags.GEESE_SPAWNABLE_ON) || world.getBlockState(pos.down()).getFluidState().isIn(FluidTags.WATER);
+        BlockState downState = world.getBlockState(pos.down());
+
+        boolean isValidSurface = downState.isIn(ModTags.BlockTags.GEESE_SPAWNABLE_ON)
+                || downState.getFluidState().isIn(FluidTags.WATER)
+                || downState.isOf(Blocks.ICE)
+                || downState.isOf(Blocks.FROSTED_ICE);
+
+        boolean hasEnoughSpace;
+        if (downState.isOf(Blocks.ICE) || downState.isOf(Blocks.FROSTED_ICE)) {
+            hasEnoughSpace = world.getBlockState(pos).isAir()
+                    && world.getBlockState(pos.up()).isAir();
+        } else {
+            hasEnoughSpace = world.getBlockState(pos).isAir();
+        }
+
+        return isValidSurface && hasEnoughSpace;
     }
 
     public static DefaultAttributeContainer.Builder getDefaultAttributes() {
@@ -263,7 +280,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         return super.isTamable(player, stack) && !this.hasAngerTime();
     }
 
-    private boolean isAngry() {
+    public boolean isAngry() {
         return getTarget() != null;
     }
 
@@ -295,10 +312,20 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         }
     }
 
+    private boolean isWeapon(ItemStack stack) {
+        return stack.isIn(ItemTags.SWORDS) || stack.isIn(ItemTags.AXES);
+    }
+
     @Override
     protected void loot(ItemEntity item) {
         // Don't pick up threw/spat items
         if (this.getThrower(item) == this.getUuid()) {
+            return;
+        }
+        if (isTamed()) {
+            if (item.getOwner() instanceof PlayerEntity player && isOwner(player)) {
+                    super.loot(item);
+            }
             return;
         }
         super.loot(item);
@@ -307,8 +334,10 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     @Override
     public boolean canPickupItem(ItemStack stack) {
         ItemStack mainHandStack = getMainHandStack();
-
-        if ((!FOOD.test(mainHandStack) && FOOD.test(stack))) {
+        if (isWeapon(stack)) {
+            return isTamed() && getOwner() != null && this.getHealth() == this.getMaxHealth();
+        }
+        if (!FOOD.test(mainHandStack) && FOOD.test(stack)) {
             return true;
         }
         if (mainHandStack.isEmpty()) {
