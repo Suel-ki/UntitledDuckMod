@@ -1,32 +1,47 @@
-# MultiLoader Template
+Untitled Duck Mod
+=================
 
-This project provides a Gradle project template that can compile Minecraft mods for multiple modloaders using a common project for the sources. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project, please join our [Discord](https://discord.myceliummod.network).
+[![forge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/forge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-forge)
+[![fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-fabric)
+[![Available on Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/untitled-duck-mod)
+![Available on Curseforge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg)
 
-## Getting Started
+[![Download for Forge](http://cf.way2muchnoise.eu/title/untitled-duck-mod-forge.svg?badge_style=flat)](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-forge)
+[![CurseForge](https://cf.way2muchnoise.eu/full_451789_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-forge)
+[![Download for Fabric](http://cf.way2muchnoise.eu/title/untitled-duck-mod-fabric.svg?badge_style=flat)](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-fabric)
+[![CurseForge](https://cf.way2muchnoise.eu/full_451766_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/untitled-duck-mod-fabric)
+[![Download for Modrinth](https://img.shields.io/modrinth/dt/time-stop-clock-mod?color=00AF5C&label=downloads&logo=modrinth)](https://modrinth.com/mod/time-stop-clock-mod)
 
-### IntelliJ IDEA
-This guide will show how to import the MultiLoader Template into IntelliJ IDEA. The setup process is roughly equivalent to setting up the modloaders independently and should be very familiar to anyone who has worked with their MDKs.
+![Available](https://cf.way2muchnoise.eu/versions/451789.svg)
 
-1. Clone or download this repository to your computer.
-2. Configure the project by setting the properties in the `gradle.properties` file. You will also need to change the `rootProject.name`  property in `settings.gradle`, this should match the folder name of your project, or else IDEA may complain.
-3. Open the template's root folder as a new project in IDEA. This is the folder that contains this README.md file and the gradlew executable.
-4. If your default JVM/JDK is not Java 21 you will encounter an error when opening the project. This error is fixed by going to `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM` and changing the value to a valid Java 21 JVM. You will also need to set the Project SDK to Java 21. This can be done by going to `File > Project Structure > Project SDK`. Once both have been set open the Gradle tab in IDEA and click the refresh button to reload the project.
-5. Open your Run/Debug Configurations. Under the `Application` category there should now be options to run Fabric and NeoForge projects. Select one of the client options and try to run it.
-6. Assuming you were able to run the game in step 5 your workspace should now be set up.
+This mod adds ducks and geese to minecraft.
+It works on both fabric and forge since it is powered by [geckolib] and [architectury].
 
-### Eclipse
-While it is possible to use this template in Eclipse it is not recommended. During the development of this template multiple critical bugs and quirks related to Eclipse were found at nearly every level of the required build tools. While we continue to work with these tools to report and resolve issues support for projects like these are not there yet. For now Eclipse is considered unsupported by this project. The development cycle for build tools is notoriously slow so there are no ETAs available.
+For more information look at the [description file](docs/DESCRIPTION.md) in this repo, or take a look at the projects on modrinth or curseforge.
 
-## Development Guide
-When using this template the majority of your mod should be developed in the `common` project. The `common` project is compiled against the vanilla game and is used to hold code that is shared between the different loader-specific versions of your mod. The `common` project has no knowledge or access to ModLoader specific code, apis, or concepts. Code that requires something from a specific loader must be done through the project that is specific to that loader, such as the `fabric` or `neoforge` projects.
+Credits
+-------
 
-Loader specific projects such as the `fabric` and `neoforge` project are used to load the `common` project into the game. These projects also define code that is specific to that loader. Loader specific projects can access all the code in the `common` project. It is important to remember that the `common` project can not access code from loader specific projects.
+- Duck Model, Texture and Animations by ArtistMonster24
+- Duck Sounds by [Sidearm Studios] from the [Ultimate Animal Sounds] pack
+- Duckling Sounds by [basedMedia]: [Chirp1], [Chirp2]
+- 1.17 Port by [quiqueck], many thanks!
+- 1.21.6 Port by [Xebeth], many thanks!
 
-## Removing Platforms and Loaders
-While this template has support for many modloaders, new loaders may appear in the future, and existing loaders may become less relevant.
+License
+-------
 
-Removing loader specific projects is as easy as deleting the folder, and removing the `include("projectname")` line from the `settings.gradle` file.
-For example if you wanted to remove support for `forge` you would follow the following steps:
+The code of the project is licensed under the MIT License. See LICENSE.
 
-1. Delete the subproject folder. For example, delete `MultiLoader-Template/forge`.
-2. Remove the project from `settings.gradle`. For example, remove `include("forge")`. 
+You may only use the assets like models and sounds for further development of this mod.
+The exception is the duckling sounds which are licensed under CC0.
+
+[basedMedia]: https://freesound.org/people/basedMedia/
+[geckolib]: https://geckolib.com
+[architectury]: https://github.com/architectury/architectury-plugin
+[Sidearm Studios]: https://sidearmstudios.com
+[Ultimate Animal Sounds]: https://assetstore.unity.com/packages/audio/sound-fx/animals/ultimate-animal-sounds-173490
+[Chirp1]: https://freesound.org/people/basedMedia/sounds/548099/
+[Chirp2]: https://freesound.org/people/basedMedia/sounds/548096/
+[quiqueck]: https://github.com/quiqueck
+[Xebeth]: https://github.com/Xebeth
