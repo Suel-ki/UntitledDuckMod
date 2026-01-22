@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "BEB",
+    "CCC"
+  ],
+  "key": {
+    "A": "minecraft:milk_bucket",
+    "B": "minecraft:sugar",
+    "C": "minecraft:wheat",
+    "E": "untitledduckmod:goose_egg"
+  },
+  "result": {
+    "id": "minecraft:cake"
+  }
+}

@@ -1,0 +1,54 @@
+package net.untitledduckmod.compat.jade.provider;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.untitledduckmod.DuckMod;
+import net.untitledduckmod.common.entity.WaterfowlEntity;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IEntityComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.theme.IThemeHelper;
+
+public class LayEggProvider implements IServerDataProvider<EntityAccessor> {
+
+    public static final LayEggProvider INSTANCE = new LayEggProvider();
+
+    static final Identifier UID = DuckMod.id("lay_egg");
+
+    @Override
+    public void appendServerData(CompoundTag tag, EntityAccessor accessor) {
+        int max = 24000 * 2;
+        if (accessor.getEntity() instanceof WaterfowlEntity entity) {
+            if (!entity.isBaby() && entity.getEggLayTime() < max) {
+                tag.putInt("NextEggIn", entity.getEggLayTime());
+            }
+        }
+    }
+
+    @Override
+    public Identifier getUid() {
+        return UID;
+    }
+
+    public static class Client implements IEntityComponentProvider {
+        public static final Client INSTANCE = new Client();
+
+        @Override
+        public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
+            if (!accessor.getServerData().contains("NextEggIn")) {
+                return;
+            }
+            var nextEggIn = accessor.getServerData().getInt("NextEggIn").orElse(12000);
+
+            tooltip.add(Component.translatable("jade.nextEgg", IThemeHelper.get().seconds(nextEggIn, accessor.tickRate())));
+        }
+
+        @Override
+        public Identifier getUid() {
+            return UID;
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.untitledduckmod.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "IllagerIntimidationMixin",
+    "SpawnGroupMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

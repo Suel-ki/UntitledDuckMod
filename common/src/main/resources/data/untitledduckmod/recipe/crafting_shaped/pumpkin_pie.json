@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:pumpkin",
+    "minecraft:sugar",
+    "untitledduckmod:duck_egg"
+  ],
+  "result": {
+    "id": "minecraft:pumpkin_pie"
+  }
+}

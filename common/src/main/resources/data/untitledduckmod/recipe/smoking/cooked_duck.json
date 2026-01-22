@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": "untitledduckmod:raw_duck",
+  "result": {
+    "id": "untitledduckmod:cooked_duck"
+  },
+  "experience": 0.55,
+  "cookingtime": 100
+}
