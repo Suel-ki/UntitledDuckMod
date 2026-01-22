@@ -49,6 +49,8 @@ public abstract class WaterfowlEntity extends TameableEntity implements GeoAnima
     public static final float BABY_MIN_SCALE = 0.25f;
     public static final float BABY_MAX_SCALE = 0.7f;
     public static final String EGG_LAY_TIME_TAG = "EggLayTime";
+    public static final String HELD_FOOD_TICK_TAG = "HeldFoodTick";
+    public static final String RANDOM_FORCE_EAT_TICK_TAG = "RandomForceEatTick";
     public static final String VARIANT_TAG = "Variant";
     public static final String BABY_SCALE_TAG = "BabyScale";
     public static final float SWIM_SPEED_MULTIPLIER = 3.0f;
@@ -79,6 +81,8 @@ public abstract class WaterfowlEntity extends TameableEntity implements GeoAnima
 
     protected int maxVariant = 2;
     protected int eggLayTime;
+    private int heldFoodTick = 0;
+    private int randomForceEatTick = 0;
     protected boolean isFlapping;
     protected boolean panicked = false;
     protected WaterfowlEntity(EntityType<? extends TameableEntity> entityType, World world) {
@@ -117,6 +121,8 @@ public abstract class WaterfowlEntity extends TameableEntity implements GeoAnima
         super.writeCustomData(view);
         view.putByte(VARIANT_TAG, getVariant());
         view.putInt(EGG_LAY_TIME_TAG, eggLayTime);
+        view.putInt(HELD_FOOD_TICK_TAG, heldFoodTick);
+        view.putInt(RANDOM_FORCE_EAT_TICK_TAG, randomForceEatTick);
         view.putFloat(BABY_SCALE_TAG, getBabyScale());
     }
 
@@ -126,6 +132,8 @@ public abstract class WaterfowlEntity extends TameableEntity implements GeoAnima
         setVariant(view.getByte(VARIANT_TAG, getRandomVariant()));
         setBabyScale(view.getFloat(BABY_SCALE_TAG, getRandomBabyScale()));
         this.eggLayTime = view.getInt(EGG_LAY_TIME_TAG, getRandomLayTime());
+        this.heldFoodTick = view.getInt(HELD_FOOD_TICK_TAG, 0);
+        this.randomForceEatTick = view.getInt(RANDOM_FORCE_EAT_TICK_TAG, generateRandomForceEatTick());
     }
 
     @Override
@@ -143,6 +151,30 @@ public abstract class WaterfowlEntity extends TameableEntity implements GeoAnima
     public boolean handleFallDamage(double fallDistance, float damageMultiplier, DamageSource damageSource) {
         return false;
     }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (isEdibleFood(getMainHandStack())) {
+            heldFoodTick++;
+            if (randomForceEatTick == 0) {
+                randomForceEatTick = generateRandomForceEatTick();
+            }
+        } else {
+            heldFoodTick = 0;
+            randomForceEatTick = 0;
+        }
+    }
+
+    private int generateRandomForceEatTick() {
+        int min = UntitledConfig.forceEatRandomMinTick();
+        int max = UntitledConfig.forceEatRandomMaxTick();
+        int actualMin = Math.min(min, max);
+        int actualMax = Math.max(min, max);
+        return random.nextBetweenExclusive(actualMin, actualMax);
+    }
+
+    public abstract boolean isEdibleFood(ItemStack stack);
 
     public byte getVariant() {
         return dataTracker.get(VARIANT);
@@ -320,6 +352,15 @@ public abstract class WaterfowlEntity extends TameableEntity implements GeoAnima
     public int getEggLayTime() {
         return this.eggLayTime;
     }
+
+    public int getHeldFoodTick() {
+        return this.heldFoodTick;
+    }
+
+    public int getRandomForceEatTick() {
+        return randomForceEatTick;
+    }
+
 
     public boolean tamedFollowOwner() {
         return true;

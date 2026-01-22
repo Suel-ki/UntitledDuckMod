@@ -84,7 +84,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     }
 
     public static boolean checkGooseSpawnRules(EntityType<GooseEntity> goose, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-                BlockState downState = world.getBlockState(pos.down());
+        BlockState downState = world.getBlockState(pos.down());
 
         boolean isValidSurface = downState.isIn(ModTags.BlockTags.GEESE_SPAWNABLE_ON)
                 || downState.getFluidState().isIn(FluidTags.WATER)
@@ -159,6 +159,10 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         super.handleStatus(status);
     }
 
+    public boolean isEdibleFood(ItemStack stack) {
+        return !stack.isEmpty() && getFoodIngredient().test(stack);
+    }
+
     public static Ingredient getFoodIngredient() {
         return Ingredient.ofTag(Registries.ITEM.getOrThrow(ModTags.ItemTags.GOOSE_FOOD));
     }
@@ -188,7 +192,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         this.goalSelector.add(5, new PickupFoodGoal(this));
         this.goalSelector.add(6, new GooseMeleeAttackGoal(this, 1.5D, true));
 
-        this.goalSelector.add(7, new TemptGoal(this, 1.0D, getBreedingIngredient(), false));
+        this.goalSelector.add(7, new TemptGoal(this, 1.0D, getBreedingIngredient().or(getFoodIngredient()).or(getTamingIngredient()), false));
         this.goalSelector.add(8, new WFollowParentGoal(this, 1.1D));
 
         this.goalSelector.add(9, new WFollowOwnerGoal(this, 1.6D, 10.0F, 2.0F));
@@ -282,7 +286,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         return super.isTamable(player, stack) && !this.hasAngerTime();
     }
 
-    public boolean isAngry() {
+    private boolean isAngry() {
         return getTarget() != null;
     }
 
@@ -533,7 +537,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
 
     @Override
     public float getScaleFactor() {
-        if (UntitledConfig.duckBabyRandomSize()) {
+        if (UntitledConfig.gooseBabyRandomSize()) {
             float babyScale = getBabyScale();
             float modelScale;
             if (isBaby()) {

@@ -6,8 +6,15 @@ import net.untitledduckmod.DuckMod;
 import java.util.List;
 
 public class UntitledConfigImpl extends TinyConfig {
+    @Entry(category = "common")
+    public static boolean enable_force_eat;
+    @Entry(category = "common")
+    public static int force_eat_random_min_tick = 500;
+    @Entry(category = "common")
+    public static int force_eat_random_max_tick = 1000;
     @Entry(category = "common", min = 0F, max = 100F)
     public static float food_healing_value = 0.5F;
+
     @Entry(category = "ducks")
     public static int duck_spawn_weight = 6;
     @Entry(category = "ducks")
@@ -77,6 +84,18 @@ public class UntitledConfigImpl extends TinyConfig {
 
     public static boolean gooseBabyRandomSize() {
         return goose_baby_random_size;
+    }
+
+    public boolean enableForceEat() {
+        return enable_force_eat;
+    }
+
+    public int forceEatRandomMinTick() {
+        return force_eat_random_min_tick;
+    }
+
+    public int forceEatRandomMaxTick() {
+        return force_eat_random_max_tick;
     }
 
     public static float foodHealingValue() {

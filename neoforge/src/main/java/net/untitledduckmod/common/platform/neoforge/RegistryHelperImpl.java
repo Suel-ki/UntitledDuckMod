@@ -31,7 +31,7 @@ public class RegistryHelperImpl {
     public static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, DuckMod.MOD_ID);
 
     public static <T extends Item> Supplier<T> registerItem(String name, Function<Item.Settings, T> factory, Item.Settings settings) {
-        return ITEMS.registerItem(name, factory);
+        return ITEMS.registerItem(name, factory, settings);
     }
 
     public static Supplier<SpawnEggItem> registerSpawnEggItem(

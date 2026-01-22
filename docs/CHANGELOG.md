@@ -1,3 +1,18 @@
+## Version ["v1.3.5"] - 2026-1-22
+
+### Bug fixes
+- Supplement config translation
+#### Forge
+- Fix the initial value of force_eat_random_min_tick
+
+## Version ["v1.3.0"] - 2026-1-22
+
+### Features
+Ducks and geese will auto-eat their held food within a configured tick.
+
+### Bug fixes
+- Fix [#131](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/131)
+
 ## Version ["v1.2.0"] - 2025-9-28
 - Update the goose's pickup logic: once tamed, it only picks up items given by its owner.
 

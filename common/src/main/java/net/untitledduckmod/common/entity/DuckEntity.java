@@ -17,7 +17,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.context.LootContextParameters;
@@ -115,7 +114,7 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
     }
 
     public static boolean checkDuckSpawnRules(EntityType<DuckEntity> duck, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-                BlockState downState = world.getBlockState(pos.down());
+        BlockState downState = world.getBlockState(pos.down());
 
         boolean isValidSurface = downState.isIn(ModTags.BlockTags.DUCKS_SPAWNABLE_ON)
                 || downState.getFluidState().isIn(FluidTags.WATER)
@@ -214,6 +213,10 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
         }
     }
 
+    public boolean isEdibleFood(ItemStack stack) {
+        return !stack.isEmpty() && getFoodIngredient().test(stack);
+    }
+
     public static Ingredient getFoodIngredient() {
         return Ingredient.ofTag(Registries.ITEM.getOrThrow(ModTags.ItemTags.DUCK_FOOD));
     }
@@ -233,7 +236,7 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.0D));
         this.goalSelector.add(2, new EatGoal(this));
         this.goalSelector.add(3, new SitGoal(this));
-        this.goalSelector.add(4, new TemptGoal(this, 1.0D, getBreedingIngredient(), false));
+        this.goalSelector.add(4, new TemptGoal(this, 1.0D, getBreedingIngredient().or(getFoodIngredient()).or(getTamingIngredient()), false));
         this.goalSelector.add(5, new WFollowParentGoal(this, 1.1D));
         this.goalSelector.add(6, new WFollowOwnerGoal(this, 1.6D, 10.0F, 2.0F));
         this.goalSelector.add(6, new CleanGoal(this));
@@ -507,7 +510,7 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
             ServerWorld world = (ServerWorld) this.getWorld();
             LootWorldContext lootWorldContext = new LootWorldContext.Builder(world)
                     .add(LootContextParameters.ORIGIN, this.getPos())
-                    .add(LootContextParameters.TOOL, Items.FISHING_ROD.getDefaultStack())
+                    .add(LootContextParameters.TOOL, ItemStack.EMPTY)
                     .add(LootContextParameters.THIS_ENTITY, this)
                     .luck((float) this.getAttributeValue(EntityAttributes.LUCK))
                     .build(LootContextTypes.FISHING);
