@@ -23,6 +23,9 @@ public class UntitledConfigImpl {
     public static final ForgeConfigSpec.BooleanValue GOOSE_TAMED_NOT_FOLLOW;
     public static final ForgeConfigSpec.BooleanValue GOOSE_BABY_RANDOM_SIZE;
 
+    public static final ForgeConfigSpec.BooleanValue ENABLE_FORCE_EAT;
+    public static final ForgeConfigSpec.IntValue FORCE_EAT_RANDOM_MIN_TICK;
+    public static final ForgeConfigSpec.IntValue FORCE_EAT_RANDOM_MAX_TICK;
     public static final ForgeConfigSpec.DoubleValue FOOD_HEALING_VALUE;
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>>  INTIMIDATION_BLACKLIST;
@@ -76,6 +79,15 @@ public class UntitledConfigImpl {
         builder.pop();
 
         builder.push("common");
+        ENABLE_FORCE_EAT = builder.comment("Enable/disable automatic force-eating for duck/goose")
+                .worldRestart()
+                .define("enable_force_eat", false);
+        FORCE_EAT_RANDOM_MIN_TICK = builder.comment("Min tick before duck/goose auto-eat held food")
+                .worldRestart()
+                .defineInRange("force_eat_random_min_tick", 500, 0, Integer.MAX_VALUE);
+        FORCE_EAT_RANDOM_MAX_TICK = builder.comment("Max tick before duck/goose auto-eat held food")
+                .worldRestart()
+                .defineInRange("force_eat_random_max_tick", 1000, 0, Integer.MAX_VALUE);
         FOOD_HEALING_VALUE = builder.comment("Food can heal the health value of duck & goose")
                 .worldRestart()
                 .defineInRange("food_healing_value", 0.5D, 0D, 100D);
@@ -132,6 +144,18 @@ public class UntitledConfigImpl {
 
     public static boolean gooseBabyRandomSize() {
         return GOOSE_BABY_RANDOM_SIZE.get();
+    }
+
+    public static boolean enableForceEat() {
+        return ENABLE_FORCE_EAT.get();
+    }
+
+    public static int forceEatRandomMinTick() {
+        return FORCE_EAT_RANDOM_MIN_TICK.get();
+    }
+
+    public static int forceEatRandomMaxTick() {
+        return FORCE_EAT_RANDOM_MAX_TICK.get();
     }
 
     public static float foodHealingValue() {
