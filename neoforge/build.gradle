@@ -32,7 +32,7 @@ repositories {
 dependencies {
     neoForge "net.neoforged:neoforge:${neo_version}"
 
-    modApi "curse.maven:jade-324717:${jade_id_neoforge}"
+    modApi "maven.modrinth:jade:${jade_version}+neoforge"
 
     modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 

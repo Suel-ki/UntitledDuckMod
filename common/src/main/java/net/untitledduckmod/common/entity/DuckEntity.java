@@ -85,6 +85,7 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
     private static final RawAnimation DIVE_ANIM = RawAnimation.begin().thenPlay("dive").thenPlay("idle_swim");
     private static final RawAnimation DANCE_ANIM = RawAnimation.begin().thenPlay("dance");
 
+    public static final Ingredient FOOD_INGREDIENT = Ingredient.fromTag(ModTags.ItemTags.DUCK_FOOD);
     public static final Ingredient BREEDING_INGREDIENT = Ingredient.fromTag(ModTags.ItemTags.DUCK_BREEDING_FOOD);
     public static final Ingredient TAMING_INGREDIENT = Ingredient.fromTag(ModTags.ItemTags.DUCK_TAMING_FOOD);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -227,7 +228,7 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.0D));
         this.goalSelector.add(2, new EatGoal(this));
         this.goalSelector.add(3, new SitGoal(this));
-        this.goalSelector.add(4, new TemptGoal(this, 1.0D, BREEDING_INGREDIENT, false));
+        this.goalSelector.add(4, new TemptGoal(this, 1.0D, BREEDING_INGREDIENT.or(TAMING_INGREDIENT).or(FOOD_INGREDIENT), false));
         this.goalSelector.add(5, new WFollowParentGoal(this, 1.1D));
         this.goalSelector.add(6, new FollowOwnerGoal(this, 1.6D, 10.0F, 2.0F));
         this.goalSelector.add(6, new CleanGoal(this));
@@ -235,6 +236,10 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
         this.goalSelector.add(7, new WanderAroundGoal(this, 1.0D));
         this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(8, new LookAroundGoal(this));
+    }
+
+    public boolean isEdibleFood(ItemStack stack) {
+        return !stack.isEmpty() && FOOD_INGREDIENT.test(stack);
     }
 
     @Override
@@ -499,7 +504,7 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
             LootContextParameterSet lootBuilder = new LootContextParameterSet
                     .Builder((ServerWorld)this.getWorld())
                     .add(LootContextParameters.ORIGIN, this.getPos())
-                    .add(LootContextParameters.TOOL, Items.FISHING_ROD.getDefaultStack())
+                    .add(LootContextParameters.TOOL, ItemStack.EMPTY)
                     .add(LootContextParameters.THIS_ENTITY, this)
                     .luck((float) this.getAttributeValue(EntityAttributes.GENERIC_LUCK))
                     .build(LootContextTypes.FISHING);

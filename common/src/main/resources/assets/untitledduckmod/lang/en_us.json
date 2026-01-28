@@ -61,7 +61,13 @@
   "untitledduckmod.config.goose_tamed_not_follow": "Goose Tamed Not Follow",
   "untitledduckmod.config.goose_baby_random_size": "Goose Baby Random Size",
   "untitledduckmod.config.intimidation_blacklist": "Intimidate Blacklist",
+  "untitledduckmod.config.enable_force_eat": "Enable Force Eat",
+  "untitledduckmod.config.force_eat_random_min_tick": "Force Eat Random Min Tick",
+  "untitledduckmod.config.force_eat_random_max_tick": "Force Eat Random Max Tick",
   "untitledduckmod.config.food_healing_value": "Food Healing value",
+  "untitledduckmod.config.enable_force_eat.tooltip": "Enable/disable automatic force-eating for duck/goose",
+  "untitledduckmod.config.force_eat_random_min_tick.tooltip": "Min tick before duck/goose auto-eat held food",
+  "untitledduckmod.config.force_eat_random_max_tick.tooltip": "Max tick before duck/goose auto-eat held food",
   "untitledduckmod.config.food_healing_value.tooltip": "Food can heal the health value of duck & goose",
   "untitledduckmod.config.duck_spawn_weight.tooltip": "How often ducks spawn (the higher, the more often)",
   "untitledduckmod.config.goose_spawn_weight.tooltip": "How often geese spawn (the higher, the more often)",
@@ -76,5 +82,7 @@
   "untitledduckmod.config.goose_tamed_not_follow.tooltip": "No more following behavior when tamed (wander)",
   "untitledduckmod.config.intimidation_blacklist.tooltip": "Intimidate effects don't work on mobs in the list",
 
-  "config.jade.plugin_untitledduckmod.lay_egg": "Egg laying time"
+  "untitledduckmod.jade.nextEat": "Next auto-eat: %s",
+  "config.jade.plugin_untitledduckmod.lay_egg": "Egg laying time",
+  "config.jade.plugin_untitledduckmod.next_eat": "Next auto-eat time"
 }

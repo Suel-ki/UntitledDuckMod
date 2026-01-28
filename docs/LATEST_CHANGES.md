@@ -1,9 +1,6 @@
-## Version ["v1.2.0"] - 2025-8-19
-
-### Features
-Update the goose's pickup logic: once tamed, it only picks up items given by its owner.
+## Version ["v1.3.5"] - 2026-1-22
 
 ### Bug fixes
-- Fix [#123](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/123)
+- Supplement config translation
 #### Forge
-- Fix [#124](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/124) 
+- Fix the initial value of force_eat_random_min_tick
