@@ -1,3 +1,14 @@
+## Version ["v1.5.2"] - 2026-2-3
+
+### Bug fixes
+- Incorrect translation of tipped_arrow
+
+## Version ["v1.5.1"] - 2026-2-3
+
+### Bug fixes
+- [#139](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/#139)
+
+
 ## Version ["v1.5.0"] - 2026-2-3
 
 ### Credits
