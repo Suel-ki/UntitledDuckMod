@@ -26,6 +26,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
@@ -224,6 +225,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         super.onEquipStack(slot, oldStack, newStack);
     }
 
+    @Nullable
     private UUID getThrower(ItemEntity ie) {
         NbtCompound nbt = new NbtCompound();
         ie.writeCustomDataToNbt(nbt);
@@ -317,17 +319,33 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
 
     @Override
     protected void loot(ItemEntity item) {
-        // Don't pick up threw/spat items
-        if (this.getThrower(item) == this.getUuid()) {
+        UUID entityUuid = this.getUuid();
+        UUID throwerId = this.getThrower(item);
+
+        if (Objects.equals(entityUuid,throwerId)) {
             return;
         }
+
+        if (this.isTamed()) {
+            UUID ownerId = this.getOwnerUuid();
+            if (!Objects.equals(ownerId, throwerId)) {
+                return;
+            }
+        }
+
         super.loot(item);
+    }
+
+    private boolean isWeapon(ItemStack stack) {
+        return stack.isIn(ItemTags.SWORDS) || stack.isIn(ItemTags.AXES);
     }
 
     @Override
     public boolean canPickupItem(ItemStack stack) {
         ItemStack mainHandStack = getMainHandStack();
-
+        if (isWeapon(stack) && isTamed()) {
+            return getOwner() != null && this.getHealth() == this.getMaxHealth();
+        }
         if ((!FOOD_INGREDIENT.test(mainHandStack) && FOOD_INGREDIENT.test(stack))) {
             return true;
         }
