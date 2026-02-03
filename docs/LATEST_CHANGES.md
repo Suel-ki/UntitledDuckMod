@@ -1,6 +1,7 @@
-## Version ["v1.3.5"] - 2026-1-22
+## Version ["v1.5.0"] - 2026-2-3
+
+### Features
+- goose can pickup weapons when tamed and at full health
 
 ### Bug fixes
-- Supplement config translation
-#### Forge
-- Fix the initial value of force_eat_random_min_tick
+- Missing the name of intimidation arrow [#138](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/138)
