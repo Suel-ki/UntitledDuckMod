@@ -1,5 +1,9 @@
 ## Version ["v1.5.0"] - 2026-2-3
 
+### Credits
+Special thanks to:
+[Practise40hrs](https://github.com/Practise40hrs) - For providing the beautiful new textures for the **Pekin Duck** and **Greylag Goose** variants.
+
 ### Features
 - Tamed geese now only pick up items from their owners
 - Added a new Pekin Duck variant.
