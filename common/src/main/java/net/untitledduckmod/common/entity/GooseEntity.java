@@ -225,6 +225,7 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         super.onEquipStack(slot, oldStack, newStack);
     }
 
+    @Nullable
     private UUID getThrower(ItemEntity ie) {
         NbtCompound nbt = new NbtCompound();
         ie.writeCustomDataToNbt(nbt);
@@ -323,14 +324,17 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     @Override
     protected void loot(ItemEntity item) {
         // Don't pick up threw/spat items
-        if (this.getThrower(item) == this.getUuid()) {
+        UUID entityUuid = this.getUuid();
+        UUID throwerId = this.getThrower(item);
+
+        if (Objects.equals(entityUuid,throwerId)) {
             return;
         }
-        if (isTamed()) {
-            if (item.getOwner() instanceof PlayerEntity player && isOwner(player)) {
-                    super.loot(item);
+        if (this.isTamed()) {
+            UUID ownerId = this.getOwnerUuid();
+            if (!Objects.equals(ownerId, throwerId)) {
+                return;
             }
-            return;
         }
         super.loot(item);
     }
@@ -338,8 +342,8 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     @Override
     public boolean canPickupItem(ItemStack stack) {
         ItemStack mainHandStack = getMainHandStack();
-        if (isWeapon(stack)) {
-            return isTamed() && getOwner() != null && this.getHealth() == this.getMaxHealth();
+        if (isWeapon(stack) && isTamed()) {
+            return getOwner() != null && this.getHealth() == this.getMaxHealth();
         }
         if (!FOOD_INGREDIENT.test(mainHandStack) && FOOD_INGREDIENT.test(stack)) {
             return true;
