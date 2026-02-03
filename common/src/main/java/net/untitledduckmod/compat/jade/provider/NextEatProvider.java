@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.untitledduckmod.DuckMod;
 import net.untitledduckmod.common.entity.WaterfowlEntity;
+import net.untitledduckmod.common.platform.Services;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -20,6 +21,8 @@ public class NextEatProvider implements IServerDataProvider<EntityAccessor> {
 
     @Override
     public void appendServerData(CompoundTag tag, EntityAccessor accessor) {
+        if (!Services.CONFIG.enableForceEat())
+            return;
         if (accessor.getEntity() instanceof WaterfowlEntity entity) {
             if (entity.isEdibleFood(entity.getMainHandItem())) {
                 var next = entity.getRandomForceEatTick() - entity.getHeldFoodTick() + 20;
