@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
@@ -282,13 +283,25 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
         if (item.getOwner() == this) {
             return;
         }
+        if (this.isTame()) {
+            if (!Objects.equals(getOwner(), item.getOwner())) {
+                return;
+            }
+        }
         super.pickUpItem(world, item);
+    }
+
+    private boolean isWeapon(ItemStack stack) {
+        return stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES);
     }
 
     @Override
     public boolean canHoldItem(ItemStack stack) {
         ItemStack mainHandStack = getMainHandItem();
 
+        if (isWeapon(stack) && isTame()) {
+            return getOwner() != null && this.getHealth() == this.getMaxHealth();
+        }
         if ((!getFoodIngredient().test(mainHandStack) && getFoodIngredient().test(stack))) {
             return true;
         }
@@ -521,13 +534,13 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
         public CleanGoal(GooseEntity goose) {
             this.goose = goose;
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
-            nextCleanTime = goose.age + (10 * 20 + goose.getRandom().nextInt(10) * 20);
+            nextCleanTime = goose.tickCount + (10 * 20 + goose.getRandom().nextInt(10) * 20);
         }
 
         @Override
         public boolean canUse() {
             // Don't clean if not near player
-            if (nextCleanTime > goose.age || goose.getNoActionTime() >= 100 || goose.getAnimation() != GooseEntity.ANIMATION_IDLE) {
+            if (nextCleanTime > goose.tickCount || goose.getNoActionTime() >= 100 || goose.getAnimation() != GooseEntity.ANIMATION_IDLE) {
                 return false;
             }
             return goose.getRandom().nextInt(40) == 0;
@@ -537,7 +550,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
         public void start() {
             cleanTime = ANIMATION_LENGTH;
             goose.setAnimation(GooseEntity.ANIMATION_CLEAN);
-            nextCleanTime = goose.age + (10 * 20 + goose.getRandom().nextInt(10) * 20);
+            nextCleanTime = goose.tickCount + (10 * 20 + goose.getRandom().nextInt(10) * 20);
         }
 
         @Override
@@ -592,7 +605,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
             if (cooldown-- > 0) {
                 return false;
             }
-            if (goose.age % 5 == 0) {
+            if (goose.tickCount % 5 == 0) {
                 targetEntity = getServerLevel(this.goose).getNearestEntity(AbstractIllager.class, TargetingConditions.forCombat(), goose, goose.getX(), goose.getY(), goose.getZ(), goose.getBoundingBox().inflate(INTIMIDATE_DISTANCE, 3, INTIMIDATE_DISTANCE));
                 return targetEntity != null;
             }
@@ -747,7 +760,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
         public StealItemGoal(GooseEntity goose) {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
             this.goose = goose;
-            nextStealTime = goose.age + goose.getRandom().nextInt(20 * 60) + 20 * 60;
+            nextStealTime = goose.tickCount + goose.getRandom().nextInt(20 * 60) + 20 * 60;
         }
 
         @Override
@@ -756,7 +769,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
             if (goose.isBaby() || goose.isTame() || !goose.getMainHandItem().isEmpty()) {
                 return false;
             }
-            if (goose.age <= nextStealTime) {
+            if (goose.tickCount <= nextStealTime) {
                 return false;
             }
             // Throttle starts
@@ -765,7 +778,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
             }
             targetPlayer = goose.level().getNearestPlayer(goose.getX(), goose.getY(), goose.getZ(), 10.0D, true);
             if (targetPlayer == null) {
-                nextStealTime = goose.age + goose.getRandom().nextInt(10 * 20) + 10 * 20;
+                nextStealTime = goose.tickCount + goose.getRandom().nextInt(10 * 20) + 10 * 20;
                 return false;
             }
 
@@ -790,7 +803,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
 
         @Override
         public void stop() {
-            nextStealTime = goose.age + goose.getRandom().nextInt(20 * 60) + 20 * 60;
+            nextStealTime = goose.tickCount + goose.getRandom().nextInt(20 * 60) + 20 * 60;
             targetPlayer = null;
         }
 
