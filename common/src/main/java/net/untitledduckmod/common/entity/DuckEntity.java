@@ -89,7 +89,7 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
     public DuckEntity(EntityType<? extends WaterfowlEntity> entityType, Level world) {
         super(entityType, world);
 
-        this.maxVariant = 3;
+        this.maxVariant = 4;
         this.vibrationUser = new VibrationUser();
         this.vibrationListenerData = new VibrationSystem.Data();
         this.jukeboxEventHandler = new DynamicGameEventListener<>(new JukeboxEventListener(this.vibrationUser.getPositionSource(), GameEvent.JUKEBOX_PLAY.value().notificationRadius()));
@@ -239,7 +239,7 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
 
         if (!this.level().isClientSide()) {
             // Stop dancing under certain conditions
-            if (this.isDancing() && this.shouldStopDancing() && this.age % 20 == 0) {
+            if (this.isDancing() && this.shouldStopDancing() && this.tickCount % 20 == 0) {
                 this.setDancing(false);
                 this.jukeboxPos = null;
             }
@@ -600,13 +600,13 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
         public CleanGoal(DuckEntity duck) {
             this.duck = duck;
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
-            nextCleanTime = duck.age + (10 * 20 + duck.getRandom().nextInt(10) * 20);
+            nextCleanTime = duck.tickCount + (10 * 20 + duck.getRandom().nextInt(10) * 20);
         }
 
         @Override
         public boolean canUse() {
             // Don't clean if not near player
-            if (nextCleanTime > duck.age || duck.getNoActionTime() >= 100 || duck.getAnimation() != DuckEntity.ANIMATION_IDLE) {
+            if (nextCleanTime > duck.tickCount || duck.getNoActionTime() >= 100 || duck.getAnimation() != DuckEntity.ANIMATION_IDLE) {
                 return false;
             }
             return duck.getRandom().nextInt(40) == 0;
@@ -616,7 +616,7 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
         public void start() {
             cleanTime = ANIMATION_LENGTH;
             duck.setAnimation(DuckEntity.ANIMATION_CLEAN);
-            nextCleanTime = duck.age + (10 * 20 + duck.getRandom().nextInt(10) * 20);
+            nextCleanTime = duck.tickCount + (10 * 20 + duck.getRandom().nextInt(10) * 20);
         }
 
         @Override
@@ -644,13 +644,13 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
         public DiveGoal(DuckEntity duck) {
             this.duck = duck;
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
-            nextDiveTime = duck.age + (8 * 20 + duck.getRandom().nextInt(10) * 20);
+            nextDiveTime = duck.tickCount + (8 * 20 + duck.getRandom().nextInt(10) * 20);
         }
 
         @Override
         public boolean canUse() {
             // Don't dive if not in water
-            if (nextDiveTime > duck.age || duck.getNoActionTime() >= 100 || !duck.isInWater() || duck.getAnimation() != DuckEntity.ANIMATION_IDLE) {
+            if (nextDiveTime > duck.tickCount || duck.getNoActionTime() >= 100 || !duck.isInWater() || duck.getAnimation() != DuckEntity.ANIMATION_IDLE) {
                 return false;
             }
             return duck.getRandom().nextInt(40) == 0 && duck.getMainHandItem().isEmpty();
@@ -661,7 +661,7 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
             //System.out.printf("[%d:%d] Start diving\n", nextDiveTime, duck.age);
             diveTime = ANIMATION_LENGTH;
             duck.setAnimation(DuckEntity.ANIMATION_DIVE);
-            nextDiveTime = duck.age + (8 * 20 + duck.getRandom().nextInt(10) * 20);
+            nextDiveTime = duck.tickCount + (8 * 20 + duck.getRandom().nextInt(10) * 20);
         }
 
         @Override

@@ -77,7 +77,7 @@ public abstract class WaterfowlEntity extends TamableAnimal implements GeoAnimat
     private static final int MIN_EGG_LAY_TIME = 6000;
     private static final int MAX_EGG_LAY_TIME = 12000;
 
-    protected int maxVariant = 2;
+    protected int maxVariant = 3;
     protected int eggLayTime;
     private int heldFoodTick = 0;
     private int randomForceEatTick = 0;

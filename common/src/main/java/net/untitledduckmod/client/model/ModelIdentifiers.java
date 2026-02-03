@@ -13,6 +13,7 @@ public class ModelIdentifiers {
 
     public static final Identifier GOOSE_TEXTURE = DuckMod.id("textures/entity/goose.png");
     public static final Identifier CANADIAN_GOOSE_TEXTURE = DuckMod.id("textures/entity/canadian_goose.png");
+    public static final Identifier GREYLAG_GOOSE_TEXTURE = DuckMod.id("textures/entity/greylag_goose.png");
     public static final Identifier GOSLING_TEXTURE = DuckMod.id("textures/entity/gosling.png");
 
     public static final Identifier PING_GOOSE_TEXTURE = DuckMod.id("textures/entity/ping_goose.png");
