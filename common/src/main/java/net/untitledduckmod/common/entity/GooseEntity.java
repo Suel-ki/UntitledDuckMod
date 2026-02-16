@@ -26,6 +26,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.storage.ReadView;
@@ -321,15 +322,29 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     @Override
     protected void loot(ServerWorld world, ItemEntity item) {
         // Don't pick up threw/spat items
-        if (item.getOwner() == this.getOwner()) {
+        if (item.getOwner() == this) {
             return;
         }
+
+        if (this.isTamed()) {
+            if (!Objects.equals(getOwner(), item.getOwner())) {
+                return;
+            }
+        }
         super.loot(world, item);
+    }
+
+    private boolean isWeapon(ItemStack stack) {
+        return stack.isIn(ItemTags.SWORDS) || stack.isIn(ItemTags.AXES);
     }
 
     @Override
     public boolean canPickupItem(ItemStack stack) {
         ItemStack mainHandStack = getMainHandStack();
+
+        if (isWeapon(stack) && isTamed()) {
+            return getOwner() != null && this.getHealth() == this.getMaxHealth();
+        }
 
         if ((!getFoodIngredient().test(mainHandStack) && getFoodIngredient().test(stack))) {
             return true;

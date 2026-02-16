@@ -8,6 +8,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
@@ -64,12 +65,16 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
         if (bone.getName().equals("beak") && !mainHand.isEmpty()) {
             poseStack.push();
             if (renderState.entityType == ModEntityTypes.getDuck()) {
-                poseStack.translate(0.0, 0.50, -0.40);
+                poseStack.translate(-0.05, 0.50, -0.30);
             } else if (renderState.entityType == ModEntityTypes.getGoose()) {
-                poseStack.translate(0.0, 1.15, -0.45);
+                poseStack.translate(0.15, 1.15, -0.40);
+                if (mainHand.getItem() instanceof BlockItem) {
+                    poseStack.translate(-0.15, 0, 0.0);
+                }
             }
 
             poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
+            poseStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-45f));
             poseStack.scale(0.7f, 0.7f, 0.7f);
 
             MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, ItemDisplayContext.GROUND, packedLight, packedOverlay, poseStack, bufferSource, ClientUtil.getLevel(), renderState.getGeckolibData(DataTickets.ANIMATABLE_INSTANCE_ID).intValue());

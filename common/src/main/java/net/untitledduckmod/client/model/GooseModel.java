@@ -39,6 +39,10 @@ public class GooseModel extends WaterfowlModel<GooseEntity> {
 
         var variant = renderState.hasGeckolibData(WaterfowlEntity.VARIANT_TICKET) ? renderState.getGeckolibData(WaterfowlEntity.VARIANT_TICKET) : 0;
         //noinspection DataFlowIssue
-        return variant == 0 ? ModelIdentifiers.GOOSE_TEXTURE : ModelIdentifiers.CANADIAN_GOOSE_TEXTURE;
+        return switch (variant) {
+            case 1 -> ModelIdentifiers.CANADIAN_GOOSE_TEXTURE;
+            case 2 -> ModelIdentifiers.GREYLAG_GOOSE_TEXTURE;
+            default -> ModelIdentifiers.GOOSE_TEXTURE;
+        };
     }
 }

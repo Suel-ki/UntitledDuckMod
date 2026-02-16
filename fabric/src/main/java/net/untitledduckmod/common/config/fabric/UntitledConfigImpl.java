@@ -86,15 +86,15 @@ public class UntitledConfigImpl extends TinyConfig {
         return goose_baby_random_size;
     }
 
-    public boolean enableForceEat() {
+    public static boolean enableForceEat() {
         return enable_force_eat;
     }
 
-    public int forceEatRandomMinTick() {
+    public static int forceEatRandomMinTick() {
         return force_eat_random_min_tick;
     }
 
-    public int forceEatRandomMaxTick() {
+    public static int forceEatRandomMaxTick() {
         return force_eat_random_max_tick;
     }
 
