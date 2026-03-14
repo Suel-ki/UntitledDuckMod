@@ -80,3 +80,7 @@ loom.remapConfigurations.configureEach {
         }
     }
 }
+tasks.withType(Javadoc) {
+    failOnError = false
+    options.encoding = 'UTF-8'
+}

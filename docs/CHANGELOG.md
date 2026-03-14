@@ -1,3 +1,8 @@
+## Version ["v1.5.3"] - 2026-3-14
+
+### Bug fixes
+- Item floats when duck holds item ([#142](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/142))
+
 ## Version ["v1.5.2"] - 2026-2-3
 
 ### Bug fixes

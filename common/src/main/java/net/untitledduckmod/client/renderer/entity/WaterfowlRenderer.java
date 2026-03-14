@@ -37,18 +37,18 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
                     poseStack.pushPose();
                     if (renderState.entityType == ModEntityTypes.getDuck()) {
                         poseStack.mulPose(Axis.XN.rotationDegrees(90f));
-                        poseStack.translate(-0.1, 0.33f, 0.5);
+                        poseStack.translate(-0.1f, 0.0f, 0.0f);
                         poseStack.mulPose(Axis.ZN.rotationDegrees(45f));
                     } else if (renderState.entityType == ModEntityTypes.getGoose()) {
                         poseStack.mulPose(Axis.XN.rotationDegrees(90f));
-                        poseStack.translate(0.16, 0.39f, 1.15);
+                        poseStack.translate(0.16f, 0.03f, 0.00f);
                         poseStack.mulPose(Axis.ZN.rotationDegrees(45f));
                     }
                     poseStack.scale(0.7f, 0.7f, 0.7f);
                     final ItemStackRenderState stackRenderState = new ItemStackRenderState();
                     final Minecraft mc = Minecraft.getInstance();
 
-                        mc.getItemModelResolver().updateForTopItem(stackRenderState, stack, ItemDisplayContext.GROUND, mc.level, null, (int)(long)renderState.getOrDefaultGeckolibData(DataTickets.ANIMATABLE_INSTANCE_ID, 0L) + displayContext.ordinal());
+                    mc.getItemModelResolver().updateForTopItem(stackRenderState, stack, ItemDisplayContext.GROUND, mc.level, null, (int)(long)renderState.getOrDefaultGeckolibData(DataTickets.ANIMATABLE_INSTANCE_ID, 0L) + displayContext.ordinal());
                     stackRenderState.submit(poseStack, renderTasks, packedLight, OverlayTexture.NO_OVERLAY, renderState.outlineColor);
                     poseStack.popPose();
                 }
