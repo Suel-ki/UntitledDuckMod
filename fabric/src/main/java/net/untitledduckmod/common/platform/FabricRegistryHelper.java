@@ -1,7 +1,7 @@
 package net.untitledduckmod.common.platform;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -37,27 +37,23 @@ public class FabricRegistryHelper implements IRegistryHelper {
     }
 
     public void setupItemGroups(Object optionalEvent) {
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(content -> {
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(content -> {
             content.accept(ModItems.DUCK_SPAWN_EGG.get());
             content.accept(ModItems.GOOSE_SPAWN_EGG.get());
         });
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(content -> {
-            content.accept(ModItems.DUCK_EGG.get());
-            content.accept(ModItems.GOOSE_EGG.get());
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(content -> {
+            content.insertAfter(Items.BLUE_EGG, ModItems.DUCK_EGG.get());
+            content.insertAfter(Items.BLUE_EGG, ModItems.GOOSE_EGG.get());
             content.accept(ModItems.DUCK_FEATHER.get());
             content.accept(ModItems.GOOSE_FOOT.get());
         });
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.COMBAT).register(content -> {
-            content.addAfter(Items.BLUE_EGG, ModItems.DUCK_EGG.get());
-            content.addAfter(Items.BLUE_EGG, ModItems.GOOSE_EGG.get());
-        });
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(content -> {
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(content -> {
             content.accept(ModItems.RAW_DUCK.get());
             content.accept(ModItems.COOKED_DUCK.get());
             content.accept(ModItems.RAW_GOOSE.get());
             content.accept(ModItems.COOKED_GOOSE.get());
         });
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(content -> {
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(content -> {
             content.accept(ModItems.DUCK_SACK.get());
             content.accept(ModItems.EMPTY_DUCK_SACK.get());
         });

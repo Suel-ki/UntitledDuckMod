@@ -1,10 +1,10 @@
 package net.untitledduckmod.client.model;
 
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.resources.Identifier;
 import net.untitledduckmod.common.entity.WaterfowlEntity;
 import org.jspecify.annotations.Nullable;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 public abstract class WaterfowlModel<T extends WaterfowlEntity>  extends DefaultedEntityGeoModel<T> {
     public WaterfowlModel(Identifier assetSubpath) { super(assetSubpath); }

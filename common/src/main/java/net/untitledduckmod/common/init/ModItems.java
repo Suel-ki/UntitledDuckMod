@@ -1,12 +1,13 @@
 package net.untitledduckmod.common.init;
 
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.untitledduckmod.DuckMod;
 import net.untitledduckmod.common.item.DuckSackItem;
@@ -49,9 +50,10 @@ public class ModItems {
         GOOSE_SPAWN_EGG = registerSpawnEggItem("goose_spawn_egg", ModEntityTypes.GOOSE);
     }
 
-    public Supplier<Item> registerItem(String name, Function<Item.Properties, Item> factory, Supplier<Item.Properties> settings)
+    public Supplier<Item> registerItem(String name, Function<Item.Properties, Item> factory, Supplier<Item.Properties> properties)
     {
-        var item = Items.registerItem(ResourceKey.create(Registries.ITEM, DuckMod.id(name)), factory, settings.get());
+        var key = ResourceKey.create(Registries.ITEM, DuckMod.id(name));
+        var item =  Registry.register(BuiltInRegistries.ITEM, key, factory.apply(properties.get().setId(key)));
         return () -> item;
     }
 

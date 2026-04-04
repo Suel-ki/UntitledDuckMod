@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "untitledduckmod",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "Untitled Duck Mod",
+  "name": "${mod_name}",
   "description": "${description}",
   "authors": [
     "Suel_ki",
@@ -16,11 +16,11 @@
     "Utsuda Shinou <github.com/utsudashinou>"
   ],
   "contact": {
-    "homepage": "https://github.com/Okabintaro/UntitledDuckMod",
-    "sources":  "https://github.com/Okabintaro/UntitledDuckMod",
-    "issues":  "https://github.com/Okabintaro/UntitledDuckMod/issues"
+    "homepage": "https://github.com/UntitledDuckDevs/UntitledDuckMod",
+    "sources":  "https://github.com/UntitledDuckDevs/UntitledDuckMod",
+    "issues":  "https://github.com/UntitledDuckDevs/UntitledDuckMod/issues"
   },
-  "license": "MIT",
+  "license": "${license}",
   "icon": "logo.png",
   "environment": "*",
   "entrypoints": {
@@ -38,9 +38,10 @@
     ]
   },
   "depends": {
-    "fabric": "*",
-    "fabricloader": ">=0.16.14",
-    "minecraft": ">=1.21",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=${java_version}",
     "geckolib": "*"
   },
   "mixins": [

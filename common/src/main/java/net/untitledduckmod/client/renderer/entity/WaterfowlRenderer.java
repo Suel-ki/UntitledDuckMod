@@ -1,27 +1,28 @@
 package net.untitledduckmod.client.renderer.entity;
 
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.RenderPassInfo;
+import com.geckolib.renderer.layer.builtin.ItemInHandGeoLayer;
+import com.geckolib.util.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.untitledduckmod.client.model.WaterfowlModel;
 import net.untitledduckmod.common.entity.WaterfowlEntity;
 import net.untitledduckmod.common.init.ModEntityTypes;
-import software.bernie.geckolib.cache.model.GeoBone;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.base.BoneSnapshots;
-import software.bernie.geckolib.renderer.base.GeoRenderState;
-import software.bernie.geckolib.renderer.base.RenderPassInfo;
-import software.bernie.geckolib.renderer.layer.builtin.ItemInHandGeoLayer;
 
 public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<T, R> {
     private static final float ADULT_SHADOW_RADIUS = 0.3f;
@@ -29,11 +30,24 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
     public WaterfowlRenderer(WaterfowlModel<T> model, EntityRendererProvider.Context context) {
         super(context, model);
         this.shadowRadius = ADULT_SHADOW_RADIUS;
-        withRenderLayer(new ItemInHandGeoLayer<>(this, "beak", "beak") {
+        withRenderLayer(new ItemInHandGeoLayer<>(context, this, "beak", "beak") {
+            protected RenderData renderDataForHand(String boneName, HumanoidArm arm, T animatable, R renderState) {
+                final HumanoidArm mainHandArm = animatable.getMainArm() == HumanoidArm.LEFT ? HumanoidArm.LEFT : HumanoidArm.RIGHT;
+                final EquipmentSlot slot = arm == mainHandArm ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                final ItemDisplayContext context = switch (slot) {
+                    case MAINHAND -> ItemDisplayContext.GROUND;
+                    default -> ItemDisplayContext.NONE;
+                };
+                final ItemStack stack = animatable.getItemBySlot(slot);
+
+                if (stack.getItem() instanceof ShieldItem)
+                    renderState.addGeckolibData((slot == EquipmentSlot.MAINHAND ? MAINHAND_SHIELD : OFFHAND_SHIELD), true);
+
+                return RenderData.item(boneName, context, RenderUtil.createRenderStateForItem(stack, this.itemModelResolver, context, animatable));
+            }
             @Override
-            protected void submitItemStackRender(PoseStack poseStack, GeoBone bone, ItemStack stack, ItemDisplayContext displayContext, R renderState, SubmitNodeCollector renderTasks,
-                                                 CameraRenderState cameraState, int packedLight, int packedOverlay, int renderColor) {
-                if (displayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+            protected void submitItemStackRender(PoseStack poseStack, GeoBone bone, ItemStackRenderState stackRenderState, ItemDisplayContext displayContext, R renderState, SubmitNodeCollector renderTasks, int packedLight) {
+                if (displayContext == ItemDisplayContext.GROUND) {
                     poseStack.pushPose();
                     if (renderState.entityType == ModEntityTypes.getDuck()) {
                         poseStack.mulPose(Axis.XN.rotationDegrees(90f));
@@ -45,10 +59,7 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
                         poseStack.mulPose(Axis.ZN.rotationDegrees(45f));
                     }
                     poseStack.scale(0.7f, 0.7f, 0.7f);
-                    final ItemStackRenderState stackRenderState = new ItemStackRenderState();
-                    final Minecraft mc = Minecraft.getInstance();
 
-                    mc.getItemModelResolver().updateForTopItem(stackRenderState, stack, ItemDisplayContext.GROUND, mc.level, null, (int)(long)renderState.getOrDefaultGeckolibData(DataTickets.ANIMATABLE_INSTANCE_ID, 0L) + displayContext.ordinal());
                     stackRenderState.submit(poseStack, renderTasks, packedLight, OverlayTexture.NO_OVERLAY, renderState.outlineColor);
                     poseStack.popPose();
                 }

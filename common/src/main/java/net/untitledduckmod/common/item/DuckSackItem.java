@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.TagValueInput;
-import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.untitledduckmod.common.entity.DuckEntity;
@@ -148,7 +147,7 @@ public class DuckSackItem extends Item {
             if (newDuck instanceof DuckEntity duck) {
                 duck.readAdditionalSaveData(nbtReadView);
                 duck.setFromSack(true);
-                duck.snapTo((double) pos.getX() + 0.5D, (double) pos.getY() + 0.4D, (double) pos.getZ() + 0.5D, Mth.wrapDegrees(world.random.nextFloat() * 360.0F), 0.0F);
+                duck.snapTo((double) pos.getX() + 0.5D, (double) pos.getY() + 0.4D, (double) pos.getZ() + 0.5D, Mth.wrapDegrees(world.getRandom().nextFloat() * 360.0F), 0.0F);
                 duck.playAmbientSound();
                 world.addFreshEntityWithPassengers(duck);
                 return true;

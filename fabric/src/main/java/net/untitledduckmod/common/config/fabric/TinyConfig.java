@@ -38,7 +38,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -373,7 +373,7 @@ public abstract class TinyConfig {
         @Override
         public void init() {
             super.init();
-            tabNavigation.setWidth(this.width);
+            tabNavigation.updateWidth(this.width);
             tabNavigation.arrangeElements();
             if (tabs.size() > 1)
                 this.addRenderableWidget(tabNavigation);
@@ -431,7 +431,7 @@ public abstract class TinyConfig {
                         if (widget instanceof EditBox textField) {
                             textField.setMaxLength(e.width()); textField.setValue(info.tempValue);
                             Predicate<String> processor = ((BiFunction<EditBox, Button, Predicate<String>>) info.function).apply(textField, done);
-                            textField.setFilter(processor);
+                            textField.setResponder(s -> {if (!processor.test(s)) textField.setValue(info.tempValue);});
                         }
                         widget.setTooltip(info.getTooltip(true));
 
@@ -496,10 +496,10 @@ public abstract class TinyConfig {
             }
         }
         @Override
-        public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-            super.render(context, mouseX, mouseY, delta);
-            this.list.render(context, mouseX, mouseY, delta);
-            if (tabs.size() < 2) context.drawCenteredString(font, title, width / 2, 10, 0xFFFFFFFF);
+        public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+            super.extractRenderState(context, mouseX, mouseY, delta);
+            this.list.extractRenderState(context, mouseX, mouseY, delta);
+            if (tabs.size() < 2) context.centeredText(font, title, width / 2, 10, 0xFFFFFFFF);
         }
     }
     @Environment(EnvType.CLIENT)
@@ -509,8 +509,8 @@ public abstract class TinyConfig {
         @Override public int scrollBarX() { return this.width -7; }
 
         @Override
-        protected void renderListSeparators(GuiGraphics context) {
-            if (renderHeaderSeparator) super.renderListSeparators(context);
+        protected void extractListSeparators(GuiGraphicsExtractor context) {
+            if (renderHeaderSeparator) super.extractListSeparators(context);
             else context.blit(RenderPipelines.GUI_TEXTURED, this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR, this.getX(), this.getBottom(), 0, 0, this.getWidth(), 2, 32, 2);
         }
         public void addButton(List<AbstractWidget> buttons, Component text, EntryInfo info) { this.addEntry(new ButtonEntry(buttons, text, info)); }
@@ -539,18 +539,18 @@ public abstract class TinyConfig {
             }
         }
 
-        public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             buttons.forEach(b -> {
                 b.setY(this.getY());
-                b.render(context, mouseX, mouseY, tickDelta);
+                b.extractRenderState(context, mouseX, mouseY, tickDelta);
             });
             if (title != null) {
                 title.setY(this.getY() + 5);
-                title.render(context, mouseX, mouseY, tickDelta);
+                title.extractRenderState(context, mouseX, mouseY, tickDelta);
 
                 if (info.entry != null && !this.buttons.isEmpty() && this.buttons.getFirst() instanceof AbstractWidget widget) {
                     int idMode = this.info.entry.idMode();
-                    if (idMode != -1) context.renderItem(idMode == 0 ?
+                    if (idMode != -1) context.item(idMode == 0 ?
                                     BuiltInRegistries.ITEM.getValue(Identifier.tryParse(this.info.tempValue)).getDefaultInstance()
                                     : BuiltInRegistries.BLOCK.getValue(Identifier.tryParse(this.info.tempValue)).asItem().getDefaultInstance(),
                             widget.getX() + widget.getWidth() - 18, this.getY() + 2);

@@ -10,10 +10,6 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
@@ -54,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    implementation "software.bernie.geckolib:geckolib-neoforge-${project.minecraft_version}:${project.geckolib_version}"
+    implementation "com.geckolib:geckolib-neoforge-${project.minecraft_version}:${project.geckolib_version}"
     implementation "maven.modrinth:jade:${project.jade_version}+neoforge"
 }
 

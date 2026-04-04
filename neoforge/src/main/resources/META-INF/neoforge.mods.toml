@@ -1,12 +1,12 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-issueTrackerURL = "https://github.com/Okabintaro/UntitledDuckMod/issues"
-license = "MIT"
+issueTrackerURL = "https://github.com/UntitledDuckDevs/UntitledDuckMod/issues"
+license = "${license}"
 
 [[mods]]
-modId = "untitledduckmod"
+modId = "${mod_id}"
 version = "${version}"
-displayName = "Untitled Duck Mod"
+displayName = "${mod_name}"
 authors = "Suel_ki, Okabintaro, ArtistMonster24"
 logoFile = "logo.png"
 credits = "Thanks to geckolib and architectury!"
@@ -17,21 +17,21 @@ ${description}
 [[dependencies.untitledduckmod]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[21.6.20-beta,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.untitledduckmod]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.21,)"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.untitledduckmod]]
 modId = "geckolib"
 mandatory = true
-versionRange = "[4.8.4,)"
+versionRange = "[5.5,)"
 ordering = "AFTER"
 side = "BOTH"
 

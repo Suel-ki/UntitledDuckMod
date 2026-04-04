@@ -10,10 +10,6 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
 }
 
 repositories {
@@ -29,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation "software.bernie.geckolib:geckolib-common-${project.minecraft_version}:${project.geckolib_version}"
+    implementation "com.geckolib:geckolib-common-${project.minecraft_version}:${project.geckolib_version}"
     implementation "maven.modrinth:jade:${project.jade_version}+neoforge"
 
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'

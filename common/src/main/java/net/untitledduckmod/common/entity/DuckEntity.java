@@ -1,7 +1,16 @@
 package net.untitledduckmod.common.entity;
 
 
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.state.KeyFrameEvent;
+import com.geckolib.cache.animation.keyframeevent.ParticleKeyframeData;
+import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -53,16 +62,6 @@ import net.untitledduckmod.common.entity.ai.goal.common.SwimGoal;
 import net.untitledduckmod.common.init.*;
 import net.untitledduckmod.common.platform.Services;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.object.PlayState;
-import software.bernie.geckolib.animation.state.AnimationTest;
-import software.bernie.geckolib.animation.state.KeyFrameEvent;
-import software.bernie.geckolib.cache.animation.keyframeevent.ParticleKeyframeData;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -415,7 +414,7 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
 
             Vec3 rotationVec = Vec3.directionFromRotation(0, yBodyRot);
             Vec3 pos = new Vec3(this.getX() + rotationVec.x / 2.0D, getEyeY() - 0.2D, this.getZ() + rotationVec.z / 2.0D);
-            this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, stack), pos.x, pos.y, pos.z,
+            this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, stack.getItem()), pos.x, pos.y, pos.z,
                     vel.x, vel.y + 0.05D, vel.z);
         }
     }

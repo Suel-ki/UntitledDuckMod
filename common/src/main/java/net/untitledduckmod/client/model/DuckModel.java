@@ -1,12 +1,11 @@
 package net.untitledduckmod.client.model;
 
+import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
 import net.untitledduckmod.DuckMod;
 import net.untitledduckmod.common.entity.DuckEntity;
 import net.untitledduckmod.common.entity.WaterfowlEntity;
-import software.bernie.geckolib.renderer.base.GeoRenderState;
-
 public class DuckModel extends WaterfowlModel<DuckEntity> {
 
     public DuckModel() {

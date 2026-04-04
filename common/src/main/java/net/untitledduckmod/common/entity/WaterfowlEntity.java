@@ -1,5 +1,9 @@
 package net.untitledduckmod.common.entity;
 
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.renderer.base.GeoRenderState;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,10 +37,6 @@ import net.minecraft.world.phys.Vec3;
 import net.untitledduckmod.common.platform.Services;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.constant.dataticket.DataTicket;
-import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 import java.util.Objects;
 
