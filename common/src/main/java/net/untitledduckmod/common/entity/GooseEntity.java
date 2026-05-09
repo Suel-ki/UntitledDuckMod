@@ -1,6 +1,7 @@
 package net.untitledduckmod.common.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,11 +24,13 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.illager.AbstractIllager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -143,7 +146,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new GooseEscapeDangerGoal(this, 1.7D));
+        this.goalSelector.addGoal(1, new GooseEscapeDangerGoal(this, 2D));
 
         this.goalSelector.addGoal(2, new IntimidateMobsGoal(this));
 
@@ -155,6 +158,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
         this.goalSelector.addGoal(4, new StealItemGoal(this));
 
         this.goalSelector.addGoal(5, new PickupFoodGoal(this));
+        this.goalSelector.addGoal(5, new SpearUseGoal(this, 2.0D,2.0D, 10.0F, 2.0F));
         this.goalSelector.addGoal(6, new GooseMeleeAttackGoal(this, 1.5D, true));
 
         this.goalSelector.addGoal(7, new TemptGoal(this, 1.0D, getBreedingIngredient().or(getFoodIngredient()).or(getTamingIngredient()), false));
@@ -581,6 +585,41 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
         public boolean canUse() {
             return ((goose.getHealth() < goose.getMaxHealth() / 2) || goose.isBaby()) && super.canUse();
         }
+
+        @Override
+        protected boolean findRandomPosition() {
+            if (this.goose.getLastDamageSource() != null) {
+                Entity attacker = this.goose.getLastDamageSource().getEntity();
+                if (attacker != null) {
+                    Vec3 awayPos = LandRandomPos.getPosAway(this.goose, 16, 7, attacker.position());
+                    if (awayPos != null) {
+                        this.posX = awayPos.x;
+                        this.posY = awayPos.y;
+                        this.posZ = awayPos.z;
+                        return true;
+                    }
+                }
+            }
+            return super.findRandomPosition();
+        }
+
+        @Override
+        public void start() {
+            super.start();
+
+            if (!this.goose.getMainHandItem().isEmpty() && this.goose.getMainHandItem().has(DataComponents.KINETIC_WEAPON)) {
+                this.goose.startUsingItem(InteractionHand.MAIN_HAND);
+            }
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+
+            if (!this.goose.getMainHandItem().isEmpty()) {
+                this.goose.stopUsingItem();
+            }
+        }
     }
 
     static class IntimidateMobsGoal extends Goal {
@@ -665,7 +704,7 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
 
         @Override
         public boolean canUse() {
-            return !goose.isBaby() && super.canUse();
+            return !goose.isBaby() && !goose.getMainHandItem().has(DataComponents.KINETIC_WEAPON) && super.canUse();
         }
 
         @Override
@@ -822,6 +861,151 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
             } else {
                 // Continue going to the player
                 goose.getNavigation().moveTo(targetPlayer, SPEED);
+            }
+        }
+    }
+
+    static class SpearUseGoal extends Goal {
+        static final int MIN_REPOSITION_DISTANCE = 6;
+        static final int MAX_REPOSITION_DISTANCE = 7;
+        static final int MIN_COOLDOWN_DISTANCE = 9;
+        static final int MAX_COOLDOWN_DISTANCE = 11;
+        private static final double MAX_FLEEING_TIME = reducedTickDelay(100);
+        private final GooseEntity mob;
+        private @Nullable SpearUseState state;
+        private final double speedModifierWhenCharging;
+        private final double speedModifierWhenRepositioning;
+        private final float approachDistanceSq;
+        private final float targetInRangeRadiusSq;
+
+        public SpearUseGoal(GooseEntity mob, double speedModifierWhenCharging, double speedModifierWhenRepositioning, float approachDistance, float targetInRangeRadius) {
+            this.mob = mob;
+            this.speedModifierWhenCharging = speedModifierWhenCharging;
+            this.speedModifierWhenRepositioning = speedModifierWhenRepositioning;
+            this.approachDistanceSq = approachDistance * approachDistance;
+            this.targetInRangeRadiusSq = targetInRangeRadius * targetInRangeRadius;
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        public boolean canUse() {
+            return this.ableToAttack() && !this.mob.isUsingItem();
+        }
+
+        private boolean ableToAttack() {
+            return this.mob.getTarget() != null && this.mob.getMainHandItem().has(DataComponents.KINETIC_WEAPON);
+        }
+
+        private int getKineticWeaponUseDuration() {
+            int durationTicks = Optional.ofNullable(this.mob.getMainHandItem().get(DataComponents.KINETIC_WEAPON)).map(KineticWeapon::computeDamageUseDuration).orElse(0);
+            return reducedTickDelay(durationTicks);
+        }
+
+        public boolean canContinueToUse() {
+            return this.state != null && !this.state.done && this.ableToAttack();
+        }
+
+        public void start() {
+            super.start();
+            this.mob.setAggressive(true);
+            this.state = new SpearUseState();
+        }
+
+        public void stop() {
+            super.stop();
+            this.mob.getNavigation().stop();
+            this.mob.setAggressive(false);
+            this.state = null;
+            this.mob.stopUsingItem();
+        }
+
+        public void tick() {
+            if (this.state != null) {
+                LivingEntity target = this.mob.getTarget();
+                double targetDistSqr = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
+                Entity mount = this.mob.getRootVehicle();
+                float speedModifier = 1.0F;
+                if (mount instanceof Mob) {
+                    Mob vehicleMob = (Mob) mount;
+                    speedModifier = vehicleMob.chargeSpeedModifier();
+                }
+
+                int mountDistance = this.mob.isPassenger() ? 2 : 0;
+                this.mob.lookAt(target, 30.0F, 30.0F);
+                this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
+                if (this.state.notEngagedYet()) {
+                    if (targetDistSqr > (double) this.approachDistanceSq) {
+                        this.mob.getNavigation().moveTo(target, (double) speedModifier * this.speedModifierWhenRepositioning);
+                        return;
+                    }
+
+                    this.state.startEngagement(this.getKineticWeaponUseDuration());
+                    this.mob.startUsingItem(InteractionHand.MAIN_HAND);
+                }
+
+                if (this.state.tickAndCheckEngagement()) {
+                    this.mob.stopUsingItem();
+                    double distance = Math.sqrt(targetDistSqr);
+                    this.state.awayPos = LandRandomPos.getPosAway(this.mob, Math.max(0.0F, (double) (9 + mountDistance) - distance), Math.max(1.0F, (double) (11 + mountDistance) - distance), 7, target.position());
+                    this.state.fleeingTime = 1;
+                }
+
+                if (!this.state.tickAndCheckFleeing()) {
+                    if (this.state.awayPos != null) {
+                        this.mob.getNavigation().moveTo(this.state.awayPos.x, this.state.awayPos.y, this.state.awayPos.z, (double) speedModifier * this.speedModifierWhenRepositioning);
+                        if (this.mob.getNavigation().isDone()) {
+                            if (this.state.fleeingTime > 0) {
+                                this.state.done = true;
+                                return;
+                            }
+
+                            this.state.awayPos = null;
+                        }
+                    } else {
+                        this.mob.getNavigation().moveTo(target, (double) speedModifier * this.speedModifierWhenCharging);
+                        if (targetDistSqr < (double) this.targetInRangeRadiusSq || this.mob.getNavigation().isDone()) {
+                            double distance = Math.sqrt(targetDistSqr);
+                            this.state.awayPos = LandRandomPos.getPosAway(this.mob, (double) (6 + mountDistance) - distance, (double) (7 + mountDistance) - distance, 7, target.position());
+                        }
+                    }
+                }
+            }
+        }
+
+        public static class SpearUseState {
+            private int engageTime = -1;
+            private int fleeingTime = -1;
+            private @org.jspecify.annotations.Nullable Vec3 awayPos;
+            private boolean done = false;
+
+            public boolean notEngagedYet() {
+                return this.engageTime < 0;
+            }
+
+            public void startEngagement(int spearDownTime) {
+                this.engageTime = spearDownTime;
+            }
+
+            public boolean tickAndCheckEngagement() {
+                if (this.engageTime > 0) {
+                    --this.engageTime;
+                    if (this.engageTime == 0) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public boolean tickAndCheckFleeing() {
+                if (this.fleeingTime > 0) {
+                    ++this.fleeingTime;
+                    if ((double) this.fleeingTime > MAX_FLEEING_TIME) {
+                        this.done = true;
+                        return true;
+                    }
+                }
+
+                return false;
             }
         }
     }
