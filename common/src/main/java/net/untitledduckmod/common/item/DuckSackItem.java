@@ -102,13 +102,14 @@ public class DuckSackItem extends Item {
 
                     ItemStack emptySack = new ItemStack(ModItems.EMPTY_DUCK_SACK.get());
                     stack.consume(1, user);
+
+                    world.playSound(user, pos, ModSoundEvents.DUCK_SACK_USE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                     if (stack.isEmpty()) {
-                        user.setItemInHand(hand, emptySack);
+                       return InteractionResult.CONSUME.heldItemTransformedTo(emptySack);
                     } else if (!user.addItem(emptySack)) {
                         user.drop(emptySack, false);
                     }
 
-                    world.playSound(user, pos, ModSoundEvents.DUCK_SACK_USE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
                     return InteractionResult.CONSUME;
                 } else {
                     return InteractionResult.PASS;
