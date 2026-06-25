@@ -27,6 +27,7 @@ public class DuckModForge {
         RegistryHelperImpl.BIOME_MODIFIERS.register(bus);
         RegistryHelperImpl.STATUS_EFFECTS.register(bus);
         RegistryHelperImpl.POTIONS.register(bus);
+        RegistryHelperImpl.MENU_TYPES.register(bus);
     }
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)

@@ -108,7 +108,6 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         return isValidSurface && hasEnoughSpace;
     }
 
-
     public static DefaultAttributeContainer.Builder getDefaultAttributes() {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)
@@ -296,6 +295,11 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
         this.setTarget(null);
         this.setAngerTime(0);
         this.getWorld().sendEntityStatus(this, (byte) 100);
+    }
+
+    @Override
+    public int getMouthHolderType() {
+        return 1;
     }
 
     @Override

@@ -224,6 +224,11 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
     }
 
     @Override
+    public int getMouthHolderType() {
+        return 2;
+    }
+
+    @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.6D));

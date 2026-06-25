@@ -83,7 +83,7 @@ public class WaterfowlRenderer<T extends WaterfowlEntity> extends GeoEntityRende
             heldItemRenderer.renderItem(animatable, mainHand, ModelTransformationMode.GROUND, false, poseStack, bufferSource, packedLight);
             poseStack.pop();
 
-            buffer = bufferSource.getBuffer(RenderLayer.getEntityCutout(this.getTexture(animatable)));
+            buffer = bufferSource.getBuffer(renderType);
         }
         super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
