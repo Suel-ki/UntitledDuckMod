@@ -4,7 +4,7 @@ import net.minecraft.world.entity.MobCategory;
 
 // credit to hybrid aquatic for the code
 public enum CustomSpawnGroup {
-    WATERFOWL("waterfowl", 10, true, false, 128);
+    WATERFOWL("waterfowl", 10, true, true, 128);
 
     public MobCategory spawnGroup;
     public final String name;
