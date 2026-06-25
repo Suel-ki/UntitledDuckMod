@@ -12,6 +12,10 @@ public class UntitledConfigImpl extends TinyConfig {
     public static int force_eat_random_min_tick = 500;
     @Entry(category = "common")
     public static int force_eat_random_max_tick = 1000;
+    @Entry(category = "common")
+    public static int min_egg_lay_time = 6000;
+    @Entry(category = "common")
+    public static int max_egg_lay_time = 12000;
 
     @Entry(category = "common", min = 0F, max = 100F)
     public static float food_healing_value = 0.5F;
@@ -97,6 +101,14 @@ public class UntitledConfigImpl extends TinyConfig {
 
     public static int forceEatRandomMaxTick() {
         return force_eat_random_max_tick;
+    }
+
+    public static int minEggLayTime() {
+        return min_egg_lay_time;
+    }
+
+    public static int maxEggLayTime() {
+        return max_egg_lay_time;
     }
 
     public static float foodHealingValue() {
