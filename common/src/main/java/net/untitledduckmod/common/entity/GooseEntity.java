@@ -162,6 +162,11 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     }
 
     @Override
+    public int getMouthHolderType() {
+        return 1;
+    }
+
+    @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new GooseEscapeDangerGoal(this, 1.7D));
@@ -555,6 +560,11 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
             return modelScale;
         }
         return super.getScaleFactor();
+    }
+
+    @Override
+    public boolean tamedFollowOwner() {
+        return !UntitledConfig.gooseTamedNotFollow();
     }
 
     static class CleanGoal extends Goal {

@@ -20,7 +20,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.context.LootContextParameterSet;
@@ -109,6 +108,11 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 7.0D)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2D)
                 .add(EntityAttributes.GENERIC_LUCK);
+    }
+
+    @Override
+    public int getMouthHolderType() {
+        return 2;
     }
 
     @Override
@@ -533,6 +537,11 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
             return modelScale;
         }
         return super.getScaleFactor();
+    }
+
+    @Override
+    public boolean tamedFollowOwner() {
+        return !UntitledConfig.duckTamedNotFollow();
     }
 
     private class VibrationCallback implements Vibrations.Callback {

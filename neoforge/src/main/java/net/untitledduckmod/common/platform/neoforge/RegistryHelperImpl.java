@@ -5,11 +5,16 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -17,6 +22,7 @@ import net.untitledduckmod.DuckMod;
 import net.untitledduckmod.common.entity.CustomSpawnGroup;
 import net.untitledduckmod.common.entity.neoforge.DuckEntityForge;
 import net.untitledduckmod.common.entity.neoforge.GooseEntityForge;
+import net.untitledduckmod.common.screen.ExtendedFactory;
 
 import java.util.function.Supplier;
 
@@ -27,6 +33,7 @@ public class RegistryHelperImpl {
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(Registries.POTION, DuckMod.MOD_ID);
     public static final DeferredRegister<StatusEffect> STATUS_EFFECTS = DeferredRegister.create(Registries.STATUS_EFFECT, DuckMod.MOD_ID);
     public static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, DuckMod.MOD_ID);
+    public static final DeferredRegister<ScreenHandlerType<?>> SCREEN_HANDLERS = DeferredRegister.create(Registries.SCREEN_HANDLER, DuckMod.MOD_ID);
 
     public static <T extends Item> Supplier<T> registerItem(String name, Supplier<T> item) {
         return ITEMS.register(name, item);
@@ -64,5 +71,16 @@ public class RegistryHelperImpl {
 
     public static <T extends MapCodec<? extends BiomeModifier>> void registerBiomeModifier(String name, Supplier<T> biomeModifier) {
         BIOME_MODIFIERS.register(name, biomeModifier);
+    }
+
+    public static <T extends ScreenHandler, D> ScreenHandlerType<T> createExtendedScreenHandler(ExtendedFactory<T, D> factory, PacketCodec<? super RegistryByteBuf, D> codec) {
+        return IMenuTypeExtension.create((syncId, inventory, buf) -> {
+            D data = codec.decode(buf);
+            return factory.create(syncId, inventory, data);
+        });
+    }
+
+    public static <T extends ScreenHandlerType<?>> Supplier<T> registerScreenHandler(String name, Supplier<T> screenHandler) {
+        return SCREEN_HANDLERS.register(name, screenHandler);
     }
 }

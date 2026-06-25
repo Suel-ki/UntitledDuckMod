@@ -5,9 +5,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
+import net.untitledduckmod.common.screen.ExtendedFactory;
 
 import java.util.function.Supplier;
 
@@ -42,6 +47,16 @@ public class RegistryHelper {
 
     @ExpectPlatform
     public static RegistryEntry<StatusEffect> registerStatusEffect(String name, Supplier<StatusEffect> statusEffect) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static <T extends ScreenHandler, D> ScreenHandlerType<T> createExtendedScreenHandler(ExtendedFactory<T, D> factory, PacketCodec<? super RegistryByteBuf, D> codec) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static <T extends ScreenHandlerType<?>> Supplier<T> registerScreenHandler(String name, Supplier<T> screenHandler) {
         throw new AssertionError();
     }
 

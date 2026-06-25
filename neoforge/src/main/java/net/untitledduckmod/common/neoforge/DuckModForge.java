@@ -28,6 +28,7 @@ public class DuckModForge {
         RegistryHelperImpl.BIOME_MODIFIERS.register(bus);
         RegistryHelperImpl.STATUS_EFFECTS.register(bus);
         RegistryHelperImpl.POTIONS.register(bus);
+        RegistryHelperImpl.SCREEN_HANDLERS.register(bus);
     }
 
     @EventBusSubscriber
