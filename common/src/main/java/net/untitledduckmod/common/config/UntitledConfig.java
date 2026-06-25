@@ -62,6 +62,16 @@ public class UntitledConfig {
     }
 
     @ExpectPlatform
+    public static int minEggLayTime() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static int maxEggLayTime() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static float foodHealingValue() {
         throw new AssertionError();
     }

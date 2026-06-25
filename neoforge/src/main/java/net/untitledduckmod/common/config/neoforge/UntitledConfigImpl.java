@@ -8,7 +8,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.List;
 
 public class UntitledConfigImpl {
-    public static final ModConfigSpec SERVER_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
 
     public static final ModConfigSpec.IntValue DUCK_WEIGHT;
     public static final ModConfigSpec.IntValue DUCK_MIN_GROUP_SIZE;
@@ -27,6 +27,8 @@ public class UntitledConfigImpl {
     public static final ModConfigSpec.BooleanValue ENABLE_FORCE_EAT;
     public static final ModConfigSpec.IntValue FORCE_EAT_RANDOM_MIN_TICK;
     public static final ModConfigSpec.IntValue FORCE_EAT_RANDOM_MAX_TICK;
+    public static final ModConfigSpec.IntValue MIN_EGG_LAY_TIME;
+    public static final ModConfigSpec.IntValue MAX_EGG_LAY_TIME;
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>>  INTIMIDATION_BLACKLIST;
 
@@ -88,6 +90,12 @@ public class UntitledConfigImpl {
         FORCE_EAT_RANDOM_MAX_TICK = builder.comment("Max tick before duck/goose auto-eat held food")
                 .worldRestart()
                 .defineInRange("force_eat_random_max_tick", 1000, 0, Integer.MAX_VALUE);
+        MIN_EGG_LAY_TIME = builder.comment("Min egg lay time (Ticks)")
+                .worldRestart()
+                .defineInRange("min_egg_lay_time", 6000, 0, Integer.MAX_VALUE);
+        MAX_EGG_LAY_TIME = builder.comment("Max egg lay time (Ticks)")
+                .worldRestart()
+                .defineInRange("max_egg_lay_time", 12000, 0, Integer.MAX_VALUE);
         FOOD_HEALING_VALUE = builder.comment("Food can heal the health value of duck & goose")
                 .worldRestart()
                 .defineInRange("food_healing_value", 0.5D, 0D, 100D);
@@ -99,7 +107,7 @@ public class UntitledConfigImpl {
                 .defineList("intimidation_blacklist", Lists.newArrayList("modid:test"), s -> s instanceof String);
         builder.pop();
 
-        SERVER_SPEC = builder.build();
+        COMMON_SPEC = builder.build();
     }
 
     public static int duckWeight() {
@@ -158,6 +166,14 @@ public class UntitledConfigImpl {
         return FORCE_EAT_RANDOM_MAX_TICK.get();
     }
 
+    public static int minEggLayTime() {
+        return MIN_EGG_LAY_TIME.get();
+    }
+
+    public static int maxEggLayTime() {
+        return MAX_EGG_LAY_TIME.get();
+    }
+
     public static float foodHealingValue() {
         try {
             return FOOD_HEALING_VALUE.get().floatValue();
@@ -171,6 +187,6 @@ public class UntitledConfigImpl {
     }
 
     public static void setup() {
-        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.SERVER, SERVER_SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC);
     }
 }
