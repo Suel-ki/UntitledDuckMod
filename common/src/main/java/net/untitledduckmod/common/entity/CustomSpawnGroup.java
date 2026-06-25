@@ -3,7 +3,7 @@ package net.untitledduckmod.common.entity;
 import net.minecraft.entity.SpawnGroup;
 
 public enum CustomSpawnGroup {
-    WATERFOWL("waterfowl", 10, true, false, 128);
+    WATERFOWL("waterfowl", 10, true, true, 128);
 
     public SpawnGroup spawnGroup;
     public final String name;
