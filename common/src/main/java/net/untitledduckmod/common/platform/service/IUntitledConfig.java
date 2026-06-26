@@ -16,7 +16,6 @@ public interface IUntitledConfig {
 
     boolean duckBabyRandomSize();
 
-
     int gooseWeight();
 
     int gooseMinGroupSize();
@@ -34,6 +33,10 @@ public interface IUntitledConfig {
     int forceEatRandomMinTick();
 
     int forceEatRandomMaxTick();
+
+    int minEggLayTime();
+
+    int maxEggLayTime();
 
     List<? extends String> intimidationBlacklist();
 

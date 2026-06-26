@@ -20,9 +20,8 @@ public class LayEggProvider implements IServerDataProvider<EntityAccessor> {
 
     @Override
     public void appendServerData(CompoundTag tag, EntityAccessor accessor) {
-        int max = 24000 * 2;
         if (accessor.getEntity() instanceof WaterfowlEntity entity) {
-            if (!entity.isBaby() && entity.getEggLayTime() < max) {
+            if (!entity.isBaby() && entity.getEggLayTime() > 0) {
                 tag.putInt("NextEggIn", entity.getEggLayTime());
             }
         }
