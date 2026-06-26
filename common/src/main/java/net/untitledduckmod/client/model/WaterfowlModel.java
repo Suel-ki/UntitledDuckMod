@@ -11,6 +11,8 @@ public abstract class WaterfowlModel<T extends WaterfowlEntity>  extends Default
 
     @Override
     public void addAdditionalStateData(WaterfowlEntity animatable, @Nullable Object relatedObject, GeoRenderState renderState) {
+        renderState.addGeckolibData(WaterfowlEntity.BABY_SCALE_TICKET, animatable.getBabyScale());
+        renderState.addGeckolibData(WaterfowlEntity.VARIANT_TICKET, animatable.getVariant());
         renderState.addGeckolibData(WaterfowlEntity.LOOKING_AROUND_TICKET, animatable.lookingAround());
     }
 }
