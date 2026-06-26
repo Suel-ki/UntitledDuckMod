@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntitySpawnRequest;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -141,7 +142,7 @@ public class DuckSackItem extends Item {
         var errorReporter = new ProblemReporter.ScopedCollector(() -> entityType, DuckEntity.LOGGER);
 
         var nbtReadView = TagValueInput.create(errorReporter, world.registryAccess(), entityData);
-        var optional = EntityType.create(nbtReadView, world, EntitySpawnReason.BUCKET);
+        var optional = EntityType.create(nbtReadView, world, new EntitySpawnRequest(EntitySpawnReason.BUCKET, false));
 
         if (optional.isPresent()) {
             var newDuck = optional.get();

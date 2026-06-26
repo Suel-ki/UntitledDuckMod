@@ -42,18 +42,15 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.components.tabs.GridLayoutTab;
-import net.minecraft.client.gui.components.tabs.Tab;
-import net.minecraft.client.gui.components.tabs.TabManager;
-import net.minecraft.client.gui.components.tabs.TabNavigationBar;
+import net.minecraft.client.gui.components.tabs.*;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -159,7 +156,7 @@ public abstract class TinyConfig {
         }
         public Tooltip getTooltip(boolean isButton) {
             String key = this.modid + ".config."+this.fieldName+(!isButton ? ".label" : "" )+".tooltip";
-            return Tooltip.create(isButton && this.error != null ? this.error : I18n.exists(key) ? Component.translatable(key) : Component.empty());
+            return Tooltip.create(isButton && this.error != null ? this.error : Language.getInstance().has(key) ? Component.translatable(key) : Component.empty());
         }
     }
 
@@ -240,7 +237,7 @@ public abstract class TinyConfig {
         if (value instanceof StringRepresentable option) return Component.translatable(option.getSerializedName());
 
         String translationKey = "%s.config.enum.%s.%s".formatted(modid, info.dataType.getSimpleName(), info.toTemporaryValue());
-        return I18n.exists(translationKey) ? Component.translatable(translationKey) : Component.literal(info.toTemporaryValue());
+        return Language.getInstance().has(translationKey) ? Component.translatable(translationKey) : Component.literal(info.toTemporaryValue());
     }
 
     private static void textField(EntryInfo info, Function<String,Number> f, Pattern pattern, double min, double max, boolean cast) {
@@ -309,7 +306,7 @@ public abstract class TinyConfig {
                 if (info.modid.equals(modid)) {
                     String tabId = info.entry != null ? info.entry.category() : info.comment.category();
                     String name = translationPrefix + "category." + tabId;
-                    if (!I18n.exists(name) && tabId.equals("default"))
+                    if (!Language.getInstance().has(name) && tabId.equals("default"))
                         name = translationPrefix + "title";
                     if (!tabs.containsKey(name)) {
                         Tab tab = new GridLayoutTab(Component.translatable(name));
@@ -317,9 +314,8 @@ public abstract class TinyConfig {
                     } else info.tab = tabs.get(name);
                 }
             });
-            tabNavigation = TabNavigationBar.builder(tabManager, this.width).addTabs(tabs.values().toArray(new Tab[0])).build();
+            tabNavigation = MenuTabBar.builder(tabManager, this.width).addTabs(tabs.values().toArray(new Tab[0])).build();
             tabNavigation.selectTab(0, false);
-            tabNavigation.arrangeElements();
             prevTab = tabManager.getCurrentTab();
         }
         public TinyConfig instance;
@@ -363,7 +359,7 @@ public abstract class TinyConfig {
         @Override
         public void onClose() {
             loadValuesFromJson(modid); cleanup();
-            Objects.requireNonNull(minecraft).setScreen(parent);
+            Objects.requireNonNull(minecraft).setScreenAndShow(parent);
         }
         private void cleanup() {
             entries.values().forEach(info -> {
@@ -373,8 +369,7 @@ public abstract class TinyConfig {
         @Override
         public void init() {
             super.init();
-            tabNavigation.updateWidth(this.width);
-            tabNavigation.arrangeElements();
+            tabNavigation.arrangeElements(this.width);
             if (tabs.size() > 1)
                 this.addRenderableWidget(tabNavigation);
 
@@ -562,7 +557,7 @@ public abstract class TinyConfig {
         @Override
         public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
             if (this.info != null && this.info.comment != null && !this.info.comment.url().isBlank())
-                ConfirmLinkScreen.confirmLinkNow(Minecraft.getInstance().screen, this.info.comment.url(), true);
+                ConfirmLinkScreen.confirmLinkNow(Minecraft.getInstance().gui.screen(), this.info.comment.url(), true);
             return super.mouseClicked(click, doubled);
         }
 
