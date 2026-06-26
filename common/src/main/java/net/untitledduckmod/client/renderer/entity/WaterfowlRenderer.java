@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -23,6 +22,8 @@ import net.minecraft.world.item.ShieldItem;
 import net.untitledduckmod.client.model.WaterfowlModel;
 import net.untitledduckmod.common.entity.WaterfowlEntity;
 import net.untitledduckmod.common.init.ModEntityTypes;
+
+import static com.geckolib.constant.DefaultAnimations.hardcodedHeadRotation;
 
 public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<T, R> {
     private static final float ADULT_SHADOW_RADIUS = 0.3f;
@@ -77,6 +78,7 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
         // set the variant in the render state
         renderState.addGeckolibData(WaterfowlEntity.VARIANT_TICKET, animatable.getVariant());
         renderState.addGeckolibData(WaterfowlEntity.BABY_SCALE_TICKET, animatable.getBabyScale());
+        renderState.addGeckolibData(WaterfowlEntity.LOOKING_AROUND_TICKET, animatable.lookingAround());
     }
 
     @Override
@@ -91,16 +93,12 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
 
     @Override
     public void adjustModelBonesForRender(RenderPassInfo<R> renderPassInfo, BoneSnapshots snapshots) {
-       snapshots.get("head").ifPresent(head -> {
-                    R animationState = renderPassInfo.renderState();
-                    boolean lookingAround = animationState.getGeckolibData(WaterfowlEntity.LOOKING_AROUND_TICKET);
-
-                    if (lookingAround) {
-                        head.setRotX(animationState.xRot * Mth.DEG_TO_RAD);
-                        head.setRotY(animationState.yRot * Mth.DEG_TO_RAD);
-                    }
-                }
-        );
+        super.adjustModelBonesForRender(renderPassInfo, snapshots);
+        R animationState = renderPassInfo.renderState();
+        boolean lookingAround = animationState.getOrDefaultGeckolibData(WaterfowlEntity.LOOKING_AROUND_TICKET, false);
+        if (lookingAround) {
+            hardcodedHeadRotation(renderPassInfo, snapshots, "head");
+        }
     }
 
 }
