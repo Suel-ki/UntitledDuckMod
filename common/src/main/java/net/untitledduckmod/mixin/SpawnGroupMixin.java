@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Mixin(MobCategory.class)
 public class SpawnGroupMixin {
 
-    SpawnGroupMixin(String enumname, int ordinal, String name, int spawnCap, boolean peaceful, boolean rare, int immediateDespawnRange) {
+    SpawnGroupMixin(String enumname, int ordinal, String name, String debugAbbreviation, int spawnCap, boolean peaceful, boolean rare, int immediateDespawnRange) {
         throw new AssertionError();
     }
 
@@ -25,7 +25,7 @@ public class SpawnGroupMixin {
 
     @Unique
     private static MobCategory untitledDuck$createSpawnGroup(String enumname, int ordinal, CustomSpawnGroup spawnGroup) {
-        return ((MobCategory)(Object) new SpawnGroupMixin(enumname, ordinal, spawnGroup.name, spawnGroup.spawnCap, spawnGroup.peaceful, spawnGroup.rare, spawnGroup.immediateDespawnRange));
+        return ((MobCategory)(Object) new SpawnGroupMixin(enumname, ordinal, spawnGroup.name, spawnGroup.name.toLowerCase(), spawnGroup.spawnCap, spawnGroup.peaceful, spawnGroup.rare, spawnGroup.immediateDespawnRange));
     }
 
     @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/MobCategory;$VALUES:[Lnet/minecraft/world/entity/MobCategory;", shift = At.Shift.AFTER))
