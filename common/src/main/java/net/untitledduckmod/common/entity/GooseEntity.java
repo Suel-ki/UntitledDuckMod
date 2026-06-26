@@ -144,6 +144,11 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
     }
 
     @Override
+    public int getMouthHolderType() {
+        return 1;
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new GooseEscapeDangerGoal(this, 2D));

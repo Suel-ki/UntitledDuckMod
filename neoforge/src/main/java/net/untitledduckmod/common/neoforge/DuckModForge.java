@@ -10,9 +10,10 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.untitledduckmod.DuckMod;
+import net.untitledduckmod.common.helper.MouthGuiHelper;
+import net.untitledduckmod.common.helper.neoforge.NeoMouthGuiHelper;
 import net.untitledduckmod.common.init.neoforge.*;
 import net.untitledduckmod.common.platform.Services;
-import net.untitledduckmod.common.platform.ForgeRegistryHelper;
 
 @Mod(DuckMod.MOD_ID)
 public class DuckModForge {
@@ -25,6 +26,8 @@ public class DuckModForge {
         new NeoStatusEffects(bus);
         new NeoPotions(bus);
         new NeoBiomeModifier(bus);
+        new NeoMenus(bus);
+        MouthGuiHelper.INSTANCE = new NeoMouthGuiHelper();
     }
 
     @EventBusSubscriber
