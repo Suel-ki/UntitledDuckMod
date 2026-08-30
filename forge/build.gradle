@@ -29,6 +29,9 @@ dependencies {
 
     modImplementation "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
 
+    modCompileOnly "maven.modrinth:incubation:${incubation_version}"
+    modCompileOnly "maven.modrinth:blueprint:${blueprint_version}"
+
     forgeRuntimeLibrary("com.eliotlash.mclib:mclib:20")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

@@ -91,5 +91,10 @@
 
   "untitledduckmod.jade.nextEat": "下次进食: %s",
   "config.jade.plugin_untitledduckmod.lay_egg": "产卵时间",
-  "config.jade.plugin_untitledduckmod.next_eat": "进食时间"
+  "config.jade.plugin_untitledduckmod.next_eat": "进食时间",
+
+  "block.untitledduckmod.twig_duck_nest": "树枝鸭窝",
+  "block.untitledduckmod.hay_duck_nest": "干草鸭窝",
+  "block.untitledduckmod.twig_goose_nest": "树枝鹅窝",
+  "block.untitledduckmod.hay_goose_nest": "干草鹅窝"
 }
