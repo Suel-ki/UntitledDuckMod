@@ -1,4 +1,6 @@
-## Version ["v1.5.2"] - 2026-2-3
+## Version ["v1.7.0"] - 2026-08-30
 
-### Bug fixes
-- Incorrect translation of tipped_arrow
+### Features
+- Geese and ducks cannot pick up their own meat
+#### NeoForge
+- Incubation compat
