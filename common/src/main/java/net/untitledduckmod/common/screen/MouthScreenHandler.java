@@ -13,6 +13,7 @@ import net.untitledduckmod.common.entity.DuckEntity;
 import net.untitledduckmod.common.entity.WaterfowlEntity;
 import net.untitledduckmod.common.init.ModItems;
 import net.untitledduckmod.common.init.ModScreenHandlers;
+import net.untitledduckmod.common.init.ModTags;
 
 public class MouthScreenHandler extends ScreenHandler implements ExtendedFactory<MouthScreenHandler> {
     private final Inventory entityInventory;
@@ -37,6 +38,7 @@ public class MouthScreenHandler extends ScreenHandler implements ExtendedFactory
         this.addSlot(new Slot(entityInventory, 0, 8, 18) {
             @Override
             public boolean canInsert(ItemStack stack) {
+                if (stack.isIn(ModTags.ItemTags.COOKED_MEAT) || stack.isIn(ModTags.ItemTags.RAW_MEAT)) return false;
                 if (holderType == 1 && stack.isOf(ModItems.GOOSE_EGG.get())) return false;
                 if (holderType == 2 && (stack.isOf(ModItems.DUCK_EGG.get()) || !DuckEntity.FOOD_INGREDIENT.test(stack))) return false;
                 return super.canInsert(stack);

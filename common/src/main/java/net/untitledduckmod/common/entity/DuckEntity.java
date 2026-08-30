@@ -137,7 +137,6 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
         return isValidSurface && hasEnoughSpace;
     }
 
-
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
@@ -485,7 +484,12 @@ public class DuckEntity extends WaterfowlEntity implements Vibrations, Animation
 
     @Override
     public boolean canPickupItem(ItemStack stack) {
+        if (stack.isIn(ModTags.ItemTags.COOKED_MEAT) || stack.isIn(ModTags.ItemTags.RAW_MEAT)) {
+            return false;
+        }
+
         ItemStack mainHandStack = getMainHandStack();
+
         // If the main hand is empty, allow pickup if it's a breeding or fish item
         if (mainHandStack.isEmpty()) {
             return isBreedingItem(stack) || isTamableItem(stack);

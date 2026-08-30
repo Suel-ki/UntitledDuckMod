@@ -347,6 +347,9 @@ public class GooseEntity extends WaterfowlEntity implements Angerable, Animation
     @Override
     public boolean canPickupItem(ItemStack stack) {
         ItemStack mainHandStack = getMainHandStack();
+        if (stack.isIn(ModTags.ItemTags.COOKED_MEAT) || stack.isIn(ModTags.ItemTags.RAW_MEAT)) {
+            return false;
+        }
         if (isWeapon(stack) && isTamed()) {
             return getOwner() != null && this.getHealth() == this.getMaxHealth();
         }
