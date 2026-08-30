@@ -35,6 +35,13 @@ versionRange = "[4.7,)"
 ordering = "AFTER"
 side = "BOTH"
 
+[[dependencies.untitledduckmod]]
+modId = "incubation"
+type = "optional"
+ordering = "AFTER"
+
 [[mixins]]
 config="untitledduckmod.mixins.json"
+[[mixins]]
+config="untitledduckmod.neo.mixins.json"
 

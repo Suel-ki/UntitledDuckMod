@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.untitledduckmod.mixin.neoforge",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "compat.incubation.WaterfowlEggLayerMixin"
+  ],
+  "client": [
+  ],
+  "plugin": "net.untitledduckmod.neoforge.NeoMixinPlugin",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

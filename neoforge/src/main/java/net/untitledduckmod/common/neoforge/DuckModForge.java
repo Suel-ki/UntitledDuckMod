@@ -15,6 +15,7 @@ import net.untitledduckmod.common.init.ModEntityTypes;
 import net.untitledduckmod.common.init.ModItems;
 import net.untitledduckmod.common.init.neoforge.ModBiomeModifier;
 import net.untitledduckmod.common.platform.neoforge.RegistryHelperImpl;
+import net.untitledduckmod.compat.neoforge.incubation.IncubationCompat;
 
 @Mod(DuckMod.MOD_ID)
 public class DuckModForge {
@@ -29,6 +30,9 @@ public class DuckModForge {
         RegistryHelperImpl.STATUS_EFFECTS.register(bus);
         RegistryHelperImpl.POTIONS.register(bus);
         RegistryHelperImpl.SCREEN_HANDLERS.register(bus);
+        if (IncubationCompat.isLoaded()) {
+            new IncubationCompat(bus);
+        }
     }
 
     @EventBusSubscriber
