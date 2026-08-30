@@ -1,3 +1,10 @@
+## Version ["v1.7.0"] - 2026-08-30
+
+### Features
+- Geese and ducks cannot pick up their own meat
+#### Forge
+- Incubation compat
+
 ## Version ["v1.5.2"] - 2026-2-3
 
 ### Bug fixes
