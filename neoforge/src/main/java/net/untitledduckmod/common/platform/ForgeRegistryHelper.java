@@ -1,6 +1,7 @@
 package net.untitledduckmod.common.platform;
 
 import net.minecraft.core.Holder;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.biome.Biome;
@@ -38,10 +39,10 @@ public class ForgeRegistryHelper implements IRegistryHelper {
 
     public static void addBiomeSpawns(Holder<Biome> biome, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (biome.is(ModTags.BiomeTags.DUCK_BIOMES)) {
-            builder.getMobSpawnSettings().getSpawner(CustomSpawnGroup.WATERFOWL.spawnGroup).add(new MobSpawnSettings.SpawnerData(ModEntityTypes.getDuck(), Services.CONFIG.duckMinGroupSize(), Services.CONFIG.duckMaxGroupSize()), Services.CONFIG.duckWeight());
+            builder.getMobSpawnSettings().getSpawner(CustomSpawnGroup.WATERFOWL.spawnGroup).add(new MobSpawnSettings.SpawnerData(ModEntityTypes.getDuck(), UniformInt.of(Services.CONFIG.duckMinGroupSize(), Services.CONFIG.duckMaxGroupSize())), Services.CONFIG.duckWeight());
         }
         if (biome.is(ModTags.BiomeTags.GOOSE_BIOMES)) {
-            builder.getMobSpawnSettings().getSpawner(CustomSpawnGroup.WATERFOWL.spawnGroup).add(new MobSpawnSettings.SpawnerData(ModEntityTypes.getGoose(), Services.CONFIG.gooseMinGroupSize(), Services.CONFIG.gooseMaxGroupSize()), Services.CONFIG.gooseWeight());
+            builder.getMobSpawnSettings().getSpawner(CustomSpawnGroup.WATERFOWL.spawnGroup).add(new MobSpawnSettings.SpawnerData(ModEntityTypes.getGoose(), UniformInt.of(Services.CONFIG.gooseMinGroupSize(), Services.CONFIG.gooseMaxGroupSize())), Services.CONFIG.gooseWeight());
         }
     }
 

@@ -18,7 +18,9 @@ import net.minecraft.world.entity.EntitySpawnRequest;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -54,7 +56,7 @@ public class DuckSackItem extends Item {
             ItemStack stack = context.getItemInHand();
 
             if (user != null) {
-                user.swing(hand);
+                user.swing(hand, SwingAnimation.DEFAULT, false);
 
                 BlockPos placePos;
                 if (blockState.getCollisionShape(world, pos).isEmpty()) {
@@ -72,7 +74,7 @@ public class DuckSackItem extends Item {
                     if (stack.isEmpty()) {
                         user.setItemInHand(hand, emptySack);
                     } else if (!user.addItem(emptySack)) {
-                        user.drop(emptySack, false);
+                        user.drop(emptySack, false, Prediction.SERVER_ONLY);
                     }
 
                     world.playSound(user, pos, ModSoundEvents.DUCK_SACK_USE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
@@ -108,7 +110,7 @@ public class DuckSackItem extends Item {
                     if (stack.isEmpty()) {
                        return InteractionResult.CONSUME.heldItemTransformedTo(emptySack);
                     } else if (!user.addItem(emptySack)) {
-                        user.drop(emptySack, false);
+                        user.drop(emptySack, false, Prediction.SERVER_ONLY);
                     }
 
                     return InteractionResult.CONSUME;

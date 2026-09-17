@@ -64,6 +64,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -557,7 +558,7 @@ public abstract class TinyConfig {
         @Override
         public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
             if (this.info != null && this.info.comment != null && !this.info.comment.url().isBlank())
-                ConfirmLinkScreen.confirmLinkNow(Minecraft.getInstance().gui.screen(), this.info.comment.url(), true);
+                ConfirmLinkScreen.confirmLinkNow(Minecraft.getInstance().gui.screen(), URI.create(this.info.comment.url()), true);
             return super.mouseClicked(click, doubled);
         }
 

@@ -51,13 +51,13 @@ public class WaterfowlRenderer<T extends WaterfowlEntity, R extends LivingEntity
                 if (displayContext == ItemDisplayContext.GROUND) {
                     poseStack.pushPose();
                     if (renderState.entityType == ModEntityTypes.getDuck()) {
-                        poseStack.mulPose(Axis.XN.rotationDegrees(90f));
+                        poseStack.rotateDegrees(Axis.XN, 90f);
                         poseStack.translate(-0.1f, 0.0f, 0.0f);
-                        poseStack.mulPose(Axis.ZN.rotationDegrees(45f));
+                        poseStack.rotateDegrees(Axis.ZN, 45f);
                     } else if (renderState.entityType == ModEntityTypes.getGoose()) {
-                        poseStack.mulPose(Axis.XN.rotationDegrees(90f));
+                        poseStack.rotateDegrees(Axis.XN, 90f);
                         poseStack.translate(0.16f, 0.03f, 0.00f);
-                        poseStack.mulPose(Axis.ZN.rotationDegrees(45f));
+                        poseStack.rotateDegrees(Axis.ZN, 45f);
                     }
                     poseStack.scale(0.7f, 0.7f, 0.7f);
 

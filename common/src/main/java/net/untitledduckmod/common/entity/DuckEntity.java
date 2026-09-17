@@ -38,6 +38,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -277,7 +278,7 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
                 if (stackInHand.isEmpty()) {
                     player.setItemInHand(hand, duckSack);
                 } else if (!player.addItem(duckSack)) {
-                    player.drop(duckSack, false);
+                    player.drop(duckSack, false, Prediction.SERVER_ONLY);
                 }
                 this.level().playSound(null, blockPosition(), ModSoundEvents.DUCK_SACK_USE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
             } else {
