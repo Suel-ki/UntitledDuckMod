@@ -31,6 +31,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.untitledduckmod.common.entity.ai.navigation.WaterfowlPathNavigation;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
@@ -377,6 +379,11 @@ public abstract class WaterfowlEntity extends TamableAnimal implements GeoAnimat
 
     protected boolean isTamable(Player player, ItemStack stack) {
         return this.isTamableItem(stack) && !this.isTame();
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level world) {
+        return new WaterfowlPathNavigation(this, world);
     }
 
     @Override
