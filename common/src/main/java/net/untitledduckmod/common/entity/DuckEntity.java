@@ -471,6 +471,9 @@ public class DuckEntity extends WaterfowlEntity implements VibrationSystem, Anim
 
     @Override
     public boolean canHoldItem(ItemStack stack) {
+        if (stack.is(ModTags.ItemTags.COOKED_MEAT) || stack.is(ModTags.ItemTags.RAW_MEAT)) {
+            return false;
+        }
         ItemStack mainHandStack = getMainHandItem();
         // If the main hand is empty, allow pickup if it's a breeding or fish item
         if (mainHandStack.isEmpty()) {

@@ -1,6 +1,7 @@
 package net.untitledduckmod.common.init;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
@@ -36,6 +37,12 @@ public class ModTags {
         public static final TagKey<Item> GOOSE_FOOD = create("goose_food");
         public static final TagKey<Item> GOOSE_BREEDING_FOOD = create("goose_breeding_food");
         public static final TagKey<Item> GOOSE_TAMING_FOOD = create("goose_taming_food");
+        public static final TagKey<Item> RAW_MEAT = createC("foods/raw_meat");
+        public static final TagKey<Item> COOKED_MEAT = createC("foods/cooked_meat");
+
+        private static TagKey<Item> createC(String name) {
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", name));
+        }
 
         private static TagKey<Item> create(String name) {
             return TagKey.create(Registries.ITEM, DuckMod.id(name));

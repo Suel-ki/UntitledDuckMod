@@ -294,6 +294,9 @@ public class GooseEntity extends WaterfowlEntity implements NeutralMob, Animatio
 
     @Override
     public boolean canHoldItem(ItemStack stack) {
+        if (stack.is(ModTags.ItemTags.COOKED_MEAT) || stack.is(ModTags.ItemTags.RAW_MEAT)) {
+            return false;
+        }
         ItemStack mainHandStack = getMainHandItem();
 
         if (isWeapon(stack) && isTame()) {

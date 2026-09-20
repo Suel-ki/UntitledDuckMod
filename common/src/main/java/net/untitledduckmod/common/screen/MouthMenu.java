@@ -12,6 +12,7 @@ import net.untitledduckmod.common.entity.WaterfowlEntity;
 import net.untitledduckmod.common.entity.inv.ListenableSimpleContainer;
 import net.untitledduckmod.common.init.ModItems;
 import net.untitledduckmod.common.init.ModMenus;
+import net.untitledduckmod.common.init.ModTags;
 import net.untitledduckmod.common.packet.MouthData;
 
 public class MouthMenu extends AbstractContainerMenu implements ExtendedFactory<MouthMenu, MouthData> {
@@ -37,6 +38,7 @@ public class MouthMenu extends AbstractContainerMenu implements ExtendedFactory<
         this.addSlot(new Slot(entityInventory, 0, 8, 18) {
             @Override
             public boolean mayPlace(ItemStack stack) {
+                if (stack.is(ModTags.ItemTags.COOKED_MEAT) || stack.is(ModTags.ItemTags.RAW_MEAT)) return false;
                 if (holderType == 1 && stack.is(ModItems.GOOSE_EGG.get())) return false;
                 if (holderType == 2 && (stack.is(ModItems.DUCK_EGG.get()) || !DuckEntity.getFoodIngredient().test(stack))) return false;
                 return super.mayPlace(stack);
