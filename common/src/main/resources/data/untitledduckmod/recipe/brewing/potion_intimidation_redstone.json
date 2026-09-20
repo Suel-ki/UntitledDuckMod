@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:potion",
+    "potion_contents": {
+      "potions": "untitledduckmod:intimidation"
+    }
+  },
+  "output": {
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "untitledduckmod:long_intimidation"
+      }
+    },
+    "id": "minecraft:potion"
+  },
+  "reagent": {
+    "item": "minecraft:redstone"
+  }
+}

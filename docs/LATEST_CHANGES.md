@@ -1,10 +1,5 @@
-## Version ["v1.6.0"] - 2026-6-25
+## Version ["v1.7.0"] - 2026-9-17
 
-### Features
-- Custom egg laying time
-- Interaction gui for tamed ducks and geese
-- ![duck](https://cdn.modrinth.com/data/cached_images/4344f54d140a7f9f8cda6e2a98d7ee3c429e413f.png)
-- ![goose](https://cdn.modrinth.com/data/cached_images/c779efd7f4a3f65f0b1c372264ba4c6ec158ac39.png)
-
-### Bug fixes
-- Ducks and geese spawn endlessly, causing TPS to drop [#132](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/132)
+### Changes
+- Updated to Minecraft 26.3
+- Brewing recipes for the Intimidation potion are now data-driven recipes (`minecraft:brewing`), following the removal of `PotionBrewing` in 26.3
