@@ -8,7 +8,7 @@ modId = "${mod_id}"
 version = "${version}"
 displayName = "${mod_name}"
 authors = "Suel_ki, Okabintaro, ArtistMonster24"
-logoFile = "logo.png"
+iconFile = "logo.png"
 credits = "Thanks to geckolib and architectury!"
 description = '''
 ${description}
