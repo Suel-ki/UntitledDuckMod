@@ -5,7 +5,6 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
@@ -13,7 +12,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 
-import net.untitledduckmod.common.entity.CustomSpawnGroup;
 import net.untitledduckmod.common.entity.DuckEntity;
 import net.untitledduckmod.common.entity.GooseEntity;
 import net.untitledduckmod.common.init.ModEntityTypes;
@@ -39,10 +37,10 @@ public class ForgeRegistryHelper implements IRegistryHelper {
 
     public static void addBiomeSpawns(Holder<Biome> biome, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (biome.is(ModTags.BiomeTags.DUCK_BIOMES)) {
-            builder.getMobSpawnSettings().getSpawner(CustomSpawnGroup.WATERFOWL.spawnGroup).add(new MobSpawnSettings.SpawnerData(ModEntityTypes.getDuck(), UniformInt.of(Services.CONFIG.duckMinGroupSize(), Services.CONFIG.duckMaxGroupSize())), Services.CONFIG.duckWeight());
+            builder.getMobSpawnSettings().addSpawn(ModEntityTypes.getDuck(), Services.CONFIG.duckWeight(), UniformInt.of(Services.CONFIG.duckMinGroupSize(), Services.CONFIG.duckMaxGroupSize()));
         }
         if (biome.is(ModTags.BiomeTags.GOOSE_BIOMES)) {
-            builder.getMobSpawnSettings().getSpawner(CustomSpawnGroup.WATERFOWL.spawnGroup).add(new MobSpawnSettings.SpawnerData(ModEntityTypes.getGoose(), UniformInt.of(Services.CONFIG.gooseMinGroupSize(), Services.CONFIG.gooseMaxGroupSize())), Services.CONFIG.gooseWeight());
+            builder.getMobSpawnSettings().addSpawn(ModEntityTypes.getGoose(), Services.CONFIG.gooseWeight(), UniformInt.of(Services.CONFIG.gooseMinGroupSize(), Services.CONFIG.gooseMaxGroupSize()));
         }
     }
 
