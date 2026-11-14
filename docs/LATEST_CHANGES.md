@@ -1,6 +1,5 @@
-## Version ["v1.8.0"] - 2026-9-20
+## Version ["v1.8.1"] - 2026-11-14
 
-### Changes
-- Updated to Minecraft 26.3
-- Brewing recipes for the Intimidation potion are now data-driven recipes (`minecraft:brewing`), following the removal of `PotionBrewing` in 26.3
-- Geese and ducks cannot pick up their own meat
+### Bug fixes
+#### NeoForge
+- Fix NeoForge loading failed  [#150](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/150)
