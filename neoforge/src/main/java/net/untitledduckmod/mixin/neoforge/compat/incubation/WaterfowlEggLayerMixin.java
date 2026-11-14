@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(WaterfowlEntity.class)
 @Implements(@Interface(iface = EggLayer.class, prefix = "egg$"))
@@ -24,8 +25,15 @@ public abstract class WaterfowlEggLayerMixin {
         return ((WaterfowlEntity) (Object) this).getEggItem();
     }
 
+    @Unique
+    private boolean blueprint$birdJockey;
+
     public boolean egg$isBirdJockey() {
-        return false;
+        return this.blueprint$birdJockey;
+    }
+
+    public void egg$setBirdJockey(boolean jockey) {
+        this.blueprint$birdJockey = jockey;
     }
 
     public int egg$getEggTimer() {
