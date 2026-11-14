@@ -1,4 +1,8 @@
-## Version ["v1.7.0"] - 2026-08-30
+## Version ["v1.7.1"] - 2026-11-14
+
+### Bug fixes
+#### NeoForge
+- Compatibility Issue with Blueprint [#151](https://github.com/UntitledDuckDevs/UntitledDuckMod/issues/151)
 
 ### Features
 - Geese and ducks cannot pick up their own meat
