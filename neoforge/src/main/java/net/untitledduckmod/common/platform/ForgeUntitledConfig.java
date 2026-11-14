@@ -190,6 +190,6 @@ public class ForgeUntitledConfig implements IUntitledConfig {
     }
 
     public void setup() {
-        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.LOCAL, COMMON_SPEC, "untitledduckmod-common.toml");
     }
 }
